@@ -69,7 +69,7 @@
         "type": "address"
       }
     ],
-    "name": "pendingCake",
+    "name": "pendingBeraSleep",
     "outputs": [
       {
         "internalType": "uint256",

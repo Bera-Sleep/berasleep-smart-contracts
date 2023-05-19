@@ -14,14 +14,14 @@ contract IFOPool is Ownable, Pausable {
     struct UserInfo {
         uint256 shares; // number of shares for a user
         uint256 lastDepositedTime; // keeps track of deposited time for potential penalty
-        uint256 cakeAtLastUserAction; // keeps track of cake deposited at the last user action
+        uint256 berasleepAtLastUserAction; // keeps track of berasleep deposited at the last user action
         uint256 lastUserActionTime; // keeps track of the last user action time
     }
     //IFO
     struct UserIFOInfo {
         // ifo valid period is current block between startblock and endblock
-        uint256 lastActionBalance; // staked cake numbers (not include compoud cake) at last action
-        uint256 lastValidActionBalance; // staked cake numbers in ifo valid period
+        uint256 lastActionBalance; // staked berasleep numbers (not include compoud berasleep) at last action
+        uint256 lastValidActionBalance; // staked berasleep numbers in ifo valid period
         uint256 lastActionBlock; //  last action block number
         uint256 lastValidActionBlock; // last action block number in ifo valid period
         uint256 lastAvgBalance; // average balance in ifo valid period
@@ -152,7 +152,7 @@ contract IFOPool is Ownable, Pausable {
 
         totalShares = totalShares.add(currentShares);
 
-        user.cakeAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+        user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         user.lastUserActionTime = block.timestamp;
         //IFO
         _updateUserIFO(_amount, IFOActions.Deposit);
@@ -186,7 +186,7 @@ contract IFOPool is Ownable, Pausable {
      * @param _lastActionBlock: last action(deposit/withdraw) block number.
      * @param _lastValidActionBlock: last valid action(deposit/withdraw) block number.
      * @param _lastActionBalance: last valid action(deposit/withdraw) block number.
-     * @param _lastValidActionBalance: staked cake number at last action.
+     * @param _lastValidActionBalance: staked berasleep number at last action.
      * @param _lastAvgBalance: last average balance.
      */
     function _calculateAvgBalance(
@@ -220,7 +220,7 @@ contract IFOPool is Ownable, Pausable {
 
     /**
      * @notice update userIFOInfo
-     * @param _amount:the cake amount that need be add or sub
+     * @param _amount:the berasleep amount that need be add or sub
      * @param _action:IFOActions enum element
      */
     function _updateUserIFO(uint256 _amount, IFOActions _action) internal {
@@ -343,9 +343,9 @@ contract IFOPool is Ownable, Pausable {
         }
 
         if (user.shares > 0) {
-            user.cakeAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+            user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         } else {
-            user.cakeAtLastUserAction = 0;
+            user.berasleepAtLastUserAction = 0;
         }
 
         user.lastUserActionTime = block.timestamp;
@@ -390,9 +390,9 @@ contract IFOPool is Ownable, Pausable {
         }
 
         if (user.shares > 0) {
-            user.cakeAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+            user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         } else {
-            user.cakeAtLastUserAction = 0;
+            user.berasleepAtLastUserAction = 0;
         }
 
         user.lastUserActionTime = block.timestamp;
@@ -556,7 +556,7 @@ contract IFOPool is Ownable, Pausable {
      * @return Expected reward to collect in CAKE
      */
     function calculateHarvestCakeRewards() external view returns (uint256) {
-        uint256 amount = IMasterChef(masterchef).pendingCake(0, address(this));
+        uint256 amount = IMasterChef(masterchef).pendingBeraSleep(0, address(this));
         uint256 currentCallFee = amount.mul(callFee).div(10000);
 
         return currentCallFee;
@@ -564,10 +564,10 @@ contract IFOPool is Ownable, Pausable {
 
     /**
      * @notice Calculates the total pending rewards that can be restaked
-     * @return Returns total pending cake rewards
+     * @return Returns total pending berasleep rewards
      */
     function calculateTotalPendingCakeRewards() external view returns (uint256) {
-        uint256 amount = IMasterChef(masterchef).pendingCake(0, address(this));
+        uint256 amount = IMasterChef(masterchef).pendingBeraSleep(0, address(this));
         amount = amount.add(available());
 
         return amount;

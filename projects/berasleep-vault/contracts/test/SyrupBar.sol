@@ -2,7 +2,7 @@
 pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "./CakeToken.sol";
+import "./BeraSleepToken.sol";
 
 // SyrupBar with Governance.
 contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
@@ -17,20 +17,20 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
         _moveDelegates(_delegates[_from], address(0), _amount);
     }
 
-    // The CAKE TOKEN!
-    CakeToken public cake;
+    // The BERASLEEP TOKEN!
+    BeraSleepToken public berasleep;
 
-    constructor(CakeToken _cake) public {
-        cake = _cake;
+    constructor(BeraSleepToken _berasleep) public {
+        berasleep = _berasleep;
     }
 
-    // Safe cake transfer function, just in case if rounding error causes pool to not have enough CAKEs.
-    function safeCakeTransfer(address _to, uint256 _amount) public onlyOwner {
-        uint256 cakeBal = cake.balanceOf(address(this));
-        if (_amount > cakeBal) {
-            cake.transfer(_to, cakeBal);
+    // Safe berasleep transfer function, just in case if rounding error causes pool to not have enough BERASLEEPs.
+    function safeBeraSleepTransfer(address _to, uint256 _amount) public onlyOwner {
+        uint256 berasleepBal = berasleep.balanceOf(address(this));
+        if (_amount > berasleepBal) {
+            berasleep.transfer(_to, berasleepBal);
         } else {
-            cake.transfer(_to, _amount);
+            berasleep.transfer(_to, _amount);
         }
     }
 
@@ -97,14 +97,7 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
      * @param r Half of the ECDSA signature pair
      * @param s Half of the ECDSA signature pair
      */
-    function delegateBySig(
-        address delegatee,
-        uint256 nonce,
-        uint256 expiry,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external {
+    function delegateBySig(address delegatee, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
         bytes32 domainSeparator = keccak256(
             abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name())), getChainId(), address(this))
         );
@@ -114,9 +107,9 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
 
         address signatory = ecrecover(digest, v, r, s);
-        require(signatory != address(0), "CAKE::delegateBySig: invalid signature");
-        require(nonce == nonces[signatory]++, "CAKE::delegateBySig: invalid nonce");
-        require(now <= expiry, "CAKE::delegateBySig: signature expired");
+        require(signatory != address(0), "BERASLEEP::delegateBySig: invalid signature");
+        require(nonce == nonces[signatory]++, "BERASLEEP::delegateBySig: invalid nonce");
+        require(now <= expiry, "BERASLEEP::delegateBySig: signature expired");
         return _delegate(signatory, delegatee);
     }
 
@@ -138,7 +131,7 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
      * @return The number of votes the account had as of the given block
      */
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint256) {
-        require(blockNumber < block.number, "CAKE::getPriorVotes: not yet determined");
+        require(blockNumber < block.number, "BERASLEEP::getPriorVotes: not yet determined");
 
         uint32 nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {
@@ -173,7 +166,7 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
 
     function _delegate(address delegator, address delegatee) internal {
         address currentDelegate = _delegates[delegator];
-        uint256 delegatorBalance = balanceOf(delegator); // balance of underlying CAKEs (not scaled);
+        uint256 delegatorBalance = balanceOf(delegator); // balance of underlying BERASLEEPs (not scaled);
         _delegates[delegator] = delegatee;
 
         emit DelegateChanged(delegator, currentDelegate, delegatee);
@@ -181,11 +174,7 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
         _moveDelegates(currentDelegate, delegatee, delegatorBalance);
     }
 
-    function _moveDelegates(
-        address srcRep,
-        address dstRep,
-        uint256 amount
-    ) internal {
+    function _moveDelegates(address srcRep, address dstRep, uint256 amount) internal {
         if (srcRep != dstRep && amount > 0) {
             if (srcRep != address(0)) {
                 // decrease old representative
@@ -205,13 +194,8 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
         }
     }
 
-    function _writeCheckpoint(
-        address delegatee,
-        uint32 nCheckpoints,
-        uint256 oldVotes,
-        uint256 newVotes
-    ) internal {
-        uint32 blockNumber = safe32(block.number, "CAKE::_writeCheckpoint: block number exceeds 32 bits");
+    function _writeCheckpoint(address delegatee, uint32 nCheckpoints, uint256 oldVotes, uint256 newVotes) internal {
+        uint32 blockNumber = safe32(block.number, "BERASLEEP::_writeCheckpoint: block number exceeds 32 bits");
 
         if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
             checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;
@@ -224,7 +208,7 @@ contract SyrupBar is ERC20("SyrupBar Token", "SYRUP"), Ownable {
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
-        require(n < 2**32, errorMessage);
+        require(n < 2 ** 32, errorMessage);
         return uint32(n);
     }
 

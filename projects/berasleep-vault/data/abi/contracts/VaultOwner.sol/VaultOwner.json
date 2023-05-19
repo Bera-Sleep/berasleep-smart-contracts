@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_cakeVaultAddress",
+        "name": "_beraSleepVaultAddress",
         "type": "address"
       }
     ],
@@ -31,10 +31,10 @@
   },
   {
     "inputs": [],
-    "name": "cakeVault",
+    "name": "beraSleepVault",
     "outputs": [
       {
-        "internalType": "contract CakeVault",
+        "internalType": "contract BeraSleepVault",
         "name": "",
         "type": "address"
       }

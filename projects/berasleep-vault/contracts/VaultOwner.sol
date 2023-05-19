@@ -3,19 +3,19 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./CakeVault.sol";
+import "./BeraSleepVault.sol";
 
 contract VaultOwner is Ownable {
     using SafeERC20 for IERC20;
 
-    CakeVault public immutable cakeVault;
+    BeraSleepVault public immutable beraSleepVault;
 
     /**
      * @notice Constructor
-     * @param _cakeVaultAddress: CakeVault contract address
+     * @param _beraSleepVaultAddress: BeraSleepVault contract address
      */
-    constructor(address _cakeVaultAddress) public {
-        cakeVault = CakeVault(_cakeVaultAddress);
+    constructor(address _beraSleepVaultAddress) public {
+        beraSleepVault = BeraSleepVault(_beraSleepVaultAddress);
     }
 
     /**
@@ -24,7 +24,7 @@ contract VaultOwner is Ownable {
      * It makes the admin == owner.
      */
     function setAdmin() external onlyOwner {
-        cakeVault.setAdmin(address(this));
+        beraSleepVault.setAdmin(address(this));
     }
 
     /**
@@ -32,7 +32,7 @@ contract VaultOwner is Ownable {
      * @dev Only callable by the contract owner.
      */
     function setTreasury(address _treasury) external onlyOwner {
-        cakeVault.setTreasury(_treasury);
+        beraSleepVault.setTreasury(_treasury);
     }
 
     /**
@@ -40,7 +40,7 @@ contract VaultOwner is Ownable {
      * @dev Only callable by the contract owner.
      */
     function setPerformanceFee(uint256 _performanceFee) external onlyOwner {
-        cakeVault.setPerformanceFee(_performanceFee);
+        beraSleepVault.setPerformanceFee(_performanceFee);
     }
 
     /**
@@ -48,7 +48,7 @@ contract VaultOwner is Ownable {
      * @dev Only callable by the contract owner.
      */
     function setCallFee(uint256 _callFee) external onlyOwner {
-        cakeVault.setCallFee(_callFee);
+        beraSleepVault.setCallFee(_callFee);
     }
 
     /**
@@ -56,7 +56,7 @@ contract VaultOwner is Ownable {
      * @dev Only callable by the contract owner.
      */
     function setWithdrawFee(uint256 _withdrawFee) external onlyOwner {
-        cakeVault.setWithdrawFee(_withdrawFee);
+        beraSleepVault.setWithdrawFee(_withdrawFee);
     }
 
     /**
@@ -64,14 +64,14 @@ contract VaultOwner is Ownable {
      * @dev Only callable by the contract owner.
      */
     function setWithdrawFeePeriod(uint256 _withdrawFeePeriod) external onlyOwner {
-        cakeVault.setWithdrawFeePeriod(_withdrawFeePeriod);
+        beraSleepVault.setWithdrawFeePeriod(_withdrawFeePeriod);
     }
 
     /**
      * @notice Withdraw unexpected tokens sent to the Cake Vault
      */
     function inCaseTokensGetStuck(address _token) external onlyOwner {
-        cakeVault.inCaseTokensGetStuck(_token);
+        beraSleepVault.inCaseTokensGetStuck(_token);
         uint256 amount = IERC20(_token).balanceOf(address(this));
         IERC20(_token).safeTransfer(msg.sender, amount);
     }
@@ -81,7 +81,7 @@ contract VaultOwner is Ownable {
      * @dev Only possible when contract not paused.
      */
     function pause() external onlyOwner {
-        cakeVault.pause();
+        beraSleepVault.pause();
     }
 
     /**
@@ -89,6 +89,6 @@ contract VaultOwner is Ownable {
      * @dev Only possible when contract is paused.
      */
     function unpause() external onlyOwner {
-        cakeVault.unpause();
+        beraSleepVault.unpause();
     }
 }

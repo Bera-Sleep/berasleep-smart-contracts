@@ -7,18 +7,18 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "./interfaces/IMasterChef.sol";
 
-contract CakeVault is Ownable, Pausable {
+contract BeraSleepVault is Ownable, Pausable {
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
 
     struct UserInfo {
         uint256 shares; // number of shares for a user
         uint256 lastDepositedTime; // keeps track of deposited time for potential penalty
-        uint256 cakeAtLastUserAction; // keeps track of cake deposited at the last user action
+        uint256 berasleepAtLastUserAction; // keeps track of berasleep deposited at the last user action
         uint256 lastUserActionTime; // keeps track of the last user action time
     }
 
-    IERC20 public immutable token; // Cake token
+    IERC20 public immutable token; // BeraSleep token
     IERC20 public immutable receiptToken; // Syrup token
 
     IMasterChef public immutable masterchef;
@@ -48,7 +48,7 @@ contract CakeVault is Ownable, Pausable {
 
     /**
      * @notice Constructor
-     * @param _token: Cake token contract
+     * @param _token: BeraSleep token contract
      * @param _receiptToken: Syrup token contract
      * @param _masterchef: MasterChef contract
      * @param _admin: address of the admin
@@ -89,7 +89,7 @@ contract CakeVault is Ownable, Pausable {
     }
 
     /**
-     * @notice Deposits funds into the Cake Vault
+     * @notice Deposits funds into the BeraSleep Vault
      * @dev Only possible when contract not paused.
      * @param _amount: number of tokens to deposit (in CAKE)
      */
@@ -111,7 +111,7 @@ contract CakeVault is Ownable, Pausable {
 
         totalShares = totalShares.add(currentShares);
 
-        user.cakeAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+        user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         user.lastUserActionTime = block.timestamp;
 
         _earn();
@@ -213,7 +213,7 @@ contract CakeVault is Ownable, Pausable {
     }
 
     /**
-     * @notice Withdraw unexpected tokens sent to the Cake Vault
+     * @notice Withdraw unexpected tokens sent to the BeraSleep Vault
      */
     function inCaseTokensGetStuck(address _token) external onlyAdmin {
         require(_token != address(token), "Token cannot be same as deposit token");
@@ -245,8 +245,8 @@ contract CakeVault is Ownable, Pausable {
      * @notice Calculates the expected harvest reward from third party
      * @return Expected reward to collect in CAKE
      */
-    function calculateHarvestCakeRewards() external view returns (uint256) {
-        uint256 amount = IMasterChef(masterchef).pendingCake(0, address(this));
+    function calculateHarvestBeraSleepRewards() external view returns (uint256) {
+        uint256 amount = IMasterChef(masterchef).pendingBeraSleep(0, address(this));
         amount = amount.add(available());
         uint256 currentCallFee = amount.mul(callFee).div(10000);
 
@@ -255,10 +255,10 @@ contract CakeVault is Ownable, Pausable {
 
     /**
      * @notice Calculates the total pending rewards that can be restaked
-     * @return Returns total pending cake rewards
+     * @return Returns total pending berasleep rewards
      */
-    function calculateTotalPendingCakeRewards() external view returns (uint256) {
-        uint256 amount = IMasterChef(masterchef).pendingCake(0, address(this));
+    function calculateTotalPendingBeraSleepRewards() external view returns (uint256) {
+        uint256 amount = IMasterChef(masterchef).pendingBeraSleep(0, address(this));
         amount = amount.add(available());
 
         return amount;
@@ -272,7 +272,7 @@ contract CakeVault is Ownable, Pausable {
     }
 
     /**
-     * @notice Withdraws from funds from the Cake Vault
+     * @notice Withdraws from funds from the BeraSleep Vault
      * @param _shares: Number of shares to withdraw
      */
     function withdraw(uint256 _shares) public notContract {
@@ -302,9 +302,9 @@ contract CakeVault is Ownable, Pausable {
         }
 
         if (user.shares > 0) {
-            user.cakeAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+            user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         } else {
-            user.cakeAtLastUserAction = 0;
+            user.berasleepAtLastUserAction = 0;
         }
 
         user.lastUserActionTime = block.timestamp;
