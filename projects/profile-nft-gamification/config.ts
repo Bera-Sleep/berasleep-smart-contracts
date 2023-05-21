@@ -33,9 +33,9 @@ export default {
     mainnet: "0x78c2d17edb8a34fa00dd602994f16964d3fb4bab",
     testnet: "0x95bdc68b0e8977e1c99caa06c6397dec59694387",
   },
-  CakeToken: {
-    mainnet: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
-    testnet: "0xa35062141fa33bca92ce69fed37d0e8908868aae",
+  BeraSleepToken: {
+    mainnet: "0x0000000000000000000000000000000000000000",
+    testnet: "0xC938173CccA0f3C917A0dC799B3dbEF89626fE2B",
   },
   LazioToken: {
     mainnet: "0x77d547256A2cD95F32F67aE0313E450Ac200648d",

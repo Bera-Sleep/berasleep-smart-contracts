@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pancakeSwapLotteryAddress",
+        "name": "_beraSleepSwapLotteryAddress",
         "type": "address"
       },
       {
@@ -13,7 +13,7 @@
       },
       {
         "internalType": "address",
-        "name": "_pancakeProfileAddress",
+        "name": "_beraSleepProfileAddress",
         "type": "address"
       },
       {
@@ -225,6 +225,32 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepProfile",
+    "outputs": [
+      {
+        "internalType": "contract BeraSleepProfile",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepSwapLottery",
+    "outputs": [
+      {
+        "internalType": "contract IBeraSleepLottery",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -513,32 +539,6 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeProfile",
-    "outputs": [
-      {
-        "internalType": "contract PancakeProfile",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeSwapLottery",
-    "outputs": [
-      {
-        "internalType": "contract IPancakeSwapLottery",
         "name": "",
         "type": "address"
       }

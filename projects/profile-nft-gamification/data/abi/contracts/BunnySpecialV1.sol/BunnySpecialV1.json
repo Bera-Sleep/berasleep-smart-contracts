@@ -8,12 +8,12 @@
       },
       {
         "internalType": "contract IBEP20",
-        "name": "_cakeToken",
+        "name": "_beraSleepToken",
         "type": "address"
       },
       {
-        "internalType": "contract PancakeProfile",
-        "name": "_pancakeProfile",
+        "internalType": "contract BeraSleepProfile",
+        "name": "_beraSleepProfile",
         "type": "address"
       },
       {
@@ -144,13 +144,39 @@
       },
       {
         "internalType": "uint256",
-        "name": "_cakeCost",
+        "name": "_beraSleepCost",
         "type": "uint256"
       }
     ],
     "name": "addBunny",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepProfile",
+    "outputs": [
+      {
+        "internalType": "contract BeraSleepProfile",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepToken",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -175,7 +201,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "cakeCost",
+        "name": "beraSleepCost",
         "type": "uint256"
       },
       {
@@ -198,19 +224,6 @@
     "outputs": [
       {
         "internalType": "contract BunnyMintingStation",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "cakeToken",
-    "outputs": [
-      {
-        "internalType": "contract IBEP20",
         "name": "",
         "type": "address"
       }
@@ -357,19 +370,6 @@
   },
   {
     "inputs": [],
-    "name": "pancakeProfile",
-    "outputs": [
-      {
-        "internalType": "contract PancakeProfile",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -402,7 +402,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_cakeCost",
+        "name": "_beraSleepCost",
         "type": "uint256"
       },
       {

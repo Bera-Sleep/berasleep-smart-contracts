@@ -8,12 +8,12 @@
       },
       {
         "internalType": "contract IBEP20",
-        "name": "_cakeToken",
+        "name": "_beraSleepToken",
         "type": "address"
       },
       {
-        "internalType": "contract PancakeProfile",
-        "name": "_pancakeProfile",
+        "internalType": "contract BeraSleepProfile",
+        "name": "_beraSleepProfile",
         "type": "address"
       },
       {
@@ -144,6 +144,32 @@
   },
   {
     "inputs": [],
+    "name": "beraSleepProfile",
+    "outputs": [
+      {
+        "internalType": "contract BeraSleepProfile",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepToken",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "bunnyMintingStation",
     "outputs": [
       {
@@ -169,19 +195,6 @@
         "internalType": "string",
         "name": "",
         "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "cakeToken",
-    "outputs": [
-      {
-        "internalType": "contract IBEP20",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -277,19 +290,6 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeProfile",
-    "outputs": [
-      {
-        "internalType": "contract PancakeProfile",
         "name": "",
         "type": "address"
       }

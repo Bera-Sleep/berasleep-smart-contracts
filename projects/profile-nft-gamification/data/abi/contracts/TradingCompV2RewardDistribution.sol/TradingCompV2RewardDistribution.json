@@ -15,6 +15,26 @@
         "internalType": "address",
         "name": "_beraSleepTokenAddress",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_lazioTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_portoTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_santosTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tradingCompV2Address",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -25,7 +45,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "enum TradingCompV1.CompetitionStatus",
+        "internalType": "enum TradingCompV2RewardDistribution.CompetitionStatus",
         "name": "status",
         "type": "uint8"
       }
@@ -171,6 +191,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimCakeRemainder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_userAddress",
         "type": "address"
@@ -204,6 +237,21 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
         "internalType": "bool",
         "name": "",
         "type": "bool"
@@ -220,7 +268,20 @@
         "type": "uint256"
       }
     ],
-    "name": "claimRemainder",
+    "name": "claimLazioRemainder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimPortoRemainder",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -233,13 +294,39 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimSantosRemainder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "currentStatus",
     "outputs": [
       {
-        "internalType": "enum TradingCompV1.CompetitionStatus",
+        "internalType": "enum TradingCompV2RewardDistribution.CompetitionStatus",
         "name": "",
         "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lazioToken",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -273,9 +360,15 @@
   },
   {
     "inputs": [],
-    "name": "register",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "portoToken",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -287,12 +380,38 @@
   },
   {
     "inputs": [],
+    "name": "santosToken",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "tokenURI",
     "outputs": [
       {
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tradingCompV2",
+    "outputs": [
+      {
+        "internalType": "contract TradingCompV2",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -314,7 +433,7 @@
   {
     "inputs": [
       {
-        "internalType": "enum TradingCompV1.CompetitionStatus",
+        "internalType": "enum TradingCompV2RewardDistribution.CompetitionStatus",
         "name": "_status",
         "type": "uint8"
       }
@@ -343,29 +462,26 @@
       },
       {
         "internalType": "uint256[5]",
+        "name": "_lazioRewards",
+        "type": "uint256[5]"
+      },
+      {
+        "internalType": "uint256[5]",
+        "name": "_portoRewards",
+        "type": "uint256[5]"
+      },
+      {
+        "internalType": "uint256[5]",
+        "name": "_santosRewards",
+        "type": "uint256[5]"
+      },
+      {
+        "internalType": "uint256[5]",
         "name": "_pointRewards",
         "type": "uint256[5]"
       }
     ],
     "name": "updateTeamRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "_addressesToUpdate",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_rewardGroup",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateUserStatusMultiple",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -404,54 +520,9 @@
     "name": "userTradingStats",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "rewardGroup",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "teamId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "hasRegistered",
-        "type": "bool"
-      },
-      {
         "internalType": "bool",
         "name": "hasClaimed",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "viewRewardTeams",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256[5]",
-            "name": "userCampaignId",
-            "type": "uint256[5]"
-          },
-          {
-            "internalType": "uint256[5]",
-            "name": "beraSleepRewards",
-            "type": "uint256[5]"
-          },
-          {
-            "internalType": "uint256[5]",
-            "name": "pointUsers",
-            "type": "uint256[5]"
-          }
-        ],
-        "internalType": "struct TradingCompV1.CompetitionRewards[]",
-        "name": "",
-        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

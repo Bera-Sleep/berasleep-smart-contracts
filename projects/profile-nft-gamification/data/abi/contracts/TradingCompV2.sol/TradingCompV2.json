@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pancakeProfileAddress",
+        "name": "_beraSleepProfileAddress",
         "type": "address"
       },
       {
@@ -13,7 +13,7 @@
       },
       {
         "internalType": "address",
-        "name": "_cakeTokenAddress",
+        "name": "_beraSleepTokenAddress",
         "type": "address"
       },
       {
@@ -168,6 +168,32 @@
   },
   {
     "inputs": [],
+    "name": "beraSleepProfile",
+    "outputs": [
+      {
+        "internalType": "contract IBeraSleepProfile",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepToken",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "bunnyId",
     "outputs": [
       {
@@ -185,19 +211,6 @@
     "outputs": [
       {
         "internalType": "contract BunnyMintingStation",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "cakeToken",
-    "outputs": [
-      {
-        "internalType": "contract IBEP20",
         "name": "",
         "type": "address"
       }
@@ -390,19 +403,6 @@
   },
   {
     "inputs": [],
-    "name": "pancakeProfile",
-    "outputs": [
-      {
-        "internalType": "contract IPancakeProfile",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "portoToken",
     "outputs": [
       {
@@ -494,7 +494,7 @@
       },
       {
         "internalType": "uint256[5]",
-        "name": "_cakeRewards",
+        "name": "_beraSleepRewards",
         "type": "uint256[5]"
       },
       {
@@ -611,7 +611,7 @@
           },
           {
             "internalType": "uint256[5]",
-            "name": "cakeRewards",
+            "name": "beraSleepRewards",
             "type": "uint256[5]"
           },
           {

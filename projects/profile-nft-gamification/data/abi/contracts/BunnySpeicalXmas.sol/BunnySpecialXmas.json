@@ -8,12 +8,12 @@
       },
       {
         "internalType": "address",
-        "name": "_pancakeProfileAddress",
+        "name": "_beraSleepProfileAddress",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_pancakeProfileThresholdPoints",
+        "name": "_beraSleepProfileThresholdPoints",
         "type": "uint256"
       },
       {
@@ -61,11 +61,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "endBlock",
+        "name": "thresholdPoints",
         "type": "uint256"
       }
     ],
-    "name": "NewEndBlock",
+    "name": "NewBeraSleepProfileThresholdPoints",
     "type": "event"
   },
   {
@@ -74,11 +74,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "thresholdPoints",
+        "name": "endBlock",
         "type": "uint256"
       }
     ],
-    "name": "NewPancakeProfileThresholdPoints",
+    "name": "NewEndBlock",
     "type": "event"
   },
   {
@@ -112,6 +112,32 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepProfile",
+    "outputs": [
+      {
+        "internalType": "contract IBeraSleepProfile",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepProfileThresholdPoints",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -205,32 +231,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeProfile",
-    "outputs": [
-      {
-        "internalType": "contract IPancakeProfile",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeProfileThresholdPoints",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",

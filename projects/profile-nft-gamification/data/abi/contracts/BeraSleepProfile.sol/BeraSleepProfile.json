@@ -3,22 +3,22 @@
     "inputs": [
       {
         "internalType": "contract IBEP20",
-        "name": "_cakeToken",
+        "name": "_beraSleepToken",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_numberCakeToReactivate",
+        "name": "_numberBeraSleepToReactivate",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_numberCakeToRegister",
+        "name": "_numberBeraSleepToRegister",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_numberCakeToUpdate",
+        "name": "_numberBeraSleepToUpdate",
         "type": "uint256"
       }
     ],
@@ -410,7 +410,7 @@
   },
   {
     "inputs": [],
-    "name": "cakeToken",
+    "name": "beraSleepToken",
     "outputs": [
       {
         "internalType": "contract IBEP20",
@@ -810,7 +810,7 @@
   },
   {
     "inputs": [],
-    "name": "numberCakeToReactivate",
+    "name": "numberBeraSleepToReactivate",
     "outputs": [
       {
         "internalType": "uint256",
@@ -823,7 +823,7 @@
   },
   {
     "inputs": [],
-    "name": "numberCakeToRegister",
+    "name": "numberBeraSleepToRegister",
     "outputs": [
       {
         "internalType": "uint256",
@@ -836,7 +836,7 @@
   },
   {
     "inputs": [],
-    "name": "numberCakeToUpdate",
+    "name": "numberBeraSleepToUpdate",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1036,21 +1036,21 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_newNumberCakeToReactivate",
+        "name": "_newNumberBeraSleepToReactivate",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_newNumberCakeToRegister",
+        "name": "_newNumberBeraSleepToRegister",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_newNumberCakeToUpdate",
+        "name": "_newNumberBeraSleepToUpdate",
         "type": "uint256"
       }
     ],
-    "name": "updateNumberCake",
+    "name": "updateNumberBeraSleep",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
