@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "contract BeraSleepToken",
-        "name": "_cake",
+        "name": "_beraSleep",
         "type": "address"
       },
       {
@@ -18,7 +18,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_cakePerBlock",
+        "name": "_beraSleepPerBlock",
         "type": "uint256"
       },
       {
@@ -162,7 +162,7 @@
   },
   {
     "inputs": [],
-    "name": "cake",
+    "name": "beraSleep",
     "outputs": [
       {
         "internalType": "contract BeraSleepToken",
@@ -175,7 +175,7 @@
   },
   {
     "inputs": [],
-    "name": "cakePerBlock",
+    "name": "beraSleepPerBlock",
     "outputs": [
       {
         "internalType": "uint256",

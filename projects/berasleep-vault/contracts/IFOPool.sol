@@ -14,14 +14,14 @@ contract IFOPool is Ownable, Pausable {
     struct UserInfo {
         uint256 shares; // number of shares for a user
         uint256 lastDepositedTime; // keeps track of deposited time for potential penalty
-        uint256 berasleepAtLastUserAction; // keeps track of berasleep deposited at the last user action
+        uint256 beraSleepAtLastUserAction; // keeps track of beraSleep deposited at the last user action
         uint256 lastUserActionTime; // keeps track of the last user action time
     }
     //IFO
     struct UserIFOInfo {
         // ifo valid period is current block between startblock and endblock
-        uint256 lastActionBalance; // staked berasleep numbers (not include compoud berasleep) at last action
-        uint256 lastValidActionBalance; // staked berasleep numbers in ifo valid period
+        uint256 lastActionBalance; // staked beraSleep numbers (not include compoud beraSleep) at last action
+        uint256 lastValidActionBalance; // staked beraSleep numbers in ifo valid period
         uint256 lastActionBlock; //  last action block number
         uint256 lastValidActionBlock; // last action block number in ifo valid period
         uint256 lastAvgBalance; // average balance in ifo valid period
@@ -152,7 +152,7 @@ contract IFOPool is Ownable, Pausable {
 
         totalShares = totalShares.add(currentShares);
 
-        user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+        user.beraSleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         user.lastUserActionTime = block.timestamp;
         //IFO
         _updateUserIFO(_amount, IFOActions.Deposit);
@@ -186,7 +186,7 @@ contract IFOPool is Ownable, Pausable {
      * @param _lastActionBlock: last action(deposit/withdraw) block number.
      * @param _lastValidActionBlock: last valid action(deposit/withdraw) block number.
      * @param _lastActionBalance: last valid action(deposit/withdraw) block number.
-     * @param _lastValidActionBalance: staked berasleep number at last action.
+     * @param _lastValidActionBalance: staked beraSleep number at last action.
      * @param _lastAvgBalance: last average balance.
      */
     function _calculateAvgBalance(
@@ -220,7 +220,7 @@ contract IFOPool is Ownable, Pausable {
 
     /**
      * @notice update userIFOInfo
-     * @param _amount:the berasleep amount that need be add or sub
+     * @param _amount:the beraSleep amount that need be add or sub
      * @param _action:IFOActions enum element
      */
     function _updateUserIFO(uint256 _amount, IFOActions _action) internal {
@@ -343,9 +343,9 @@ contract IFOPool is Ownable, Pausable {
         }
 
         if (user.shares > 0) {
-            user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+            user.beraSleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         } else {
-            user.berasleepAtLastUserAction = 0;
+            user.beraSleepAtLastUserAction = 0;
         }
 
         user.lastUserActionTime = block.timestamp;
@@ -390,9 +390,9 @@ contract IFOPool is Ownable, Pausable {
         }
 
         if (user.shares > 0) {
-            user.berasleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
+            user.beraSleepAtLastUserAction = user.shares.mul(balanceOf()).div(totalShares);
         } else {
-            user.berasleepAtLastUserAction = 0;
+            user.beraSleepAtLastUserAction = 0;
         }
 
         user.lastUserActionTime = block.timestamp;
@@ -564,7 +564,7 @@ contract IFOPool is Ownable, Pausable {
 
     /**
      * @notice Calculates the total pending rewards that can be restaked
-     * @return Returns total pending berasleep rewards
+     * @return Returns total pending beraSleep rewards
      */
     function calculateTotalPendingCakeRewards() external view returns (uint256) {
         uint256 amount = IMasterChef(masterchef).pendingBeraSleep(0, address(this));

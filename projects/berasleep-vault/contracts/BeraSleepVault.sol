@@ -91,7 +91,7 @@ contract BeraSleepVault is Ownable, Pausable {
     /**
      * @notice Deposits funds into the BeraSleep Vault
      * @dev Only possible when contract not paused.
-     * @param _amount: number of tokens to deposit (in CAKE)
+     * @param _amount: number of tokens to deposit (in BERASLEEP)
      */
     function deposit(uint256 _amount) external whenNotPaused notContract {
         require(_amount > 0, "Nothing to deposit");
@@ -127,7 +127,7 @@ contract BeraSleepVault is Ownable, Pausable {
     }
 
     /**
-     * @notice Reinvests CAKE tokens into MasterChef
+     * @notice Reinvests BERASLEEP tokens into MasterChef
      * @dev Only possible when contract not paused.
      */
     function harvest() external notContract whenNotPaused {
@@ -243,7 +243,7 @@ contract BeraSleepVault is Ownable, Pausable {
 
     /**
      * @notice Calculates the expected harvest reward from third party
-     * @return Expected reward to collect in CAKE
+     * @return Expected reward to collect in BERASLEEP
      */
     function calculateHarvestBeraSleepRewards() external view returns (uint256) {
         uint256 amount = IMasterChef(masterchef).pendingBeraSleep(0, address(this));

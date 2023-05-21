@@ -828,7 +828,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "berasleepAtLastUserAction",
+        "name": "beraSleepAtLastUserAction",
         "type": "uint256"
       },
       {

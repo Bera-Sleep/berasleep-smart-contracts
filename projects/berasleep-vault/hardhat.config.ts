@@ -19,12 +19,19 @@ const bscMainnet: NetworkUserConfig = {
   accounts: [process.env.KEY_MAINNET!],
 };
 
+const ftmTest: NetworkUserConfig = {
+  url: "https://rpc.testnet.fantom.network",
+  chainId: 4002,
+  accounts: [process.env.KEY_TESTNET!],
+};
+
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {},
     // testnet: bscTestnet,
     // mainnet: bscMainnet,
+    test: ftmTest,
   },
   solidity: {
     version: "0.6.12",

@@ -1,86 +1,48 @@
 import { ethers, network, run } from "hardhat";
-import config from "../config";
-import { constants } from "@openzeppelin/test-helpers";
 
 const main = async () => {
-  // Get network name: hardhat, testnet or mainnet.
-  const { name } = network;
+  const BeraSleepTokenContract = await ethers.getContractFactory("BeraSleepToken");
+  const SyrupContract = await ethers.getContractFactory("SyrupBar");
+  const currentBlock = await ethers.provider.getBlockNumber();
+  const [deployer] = await ethers.getSigners();
+  const admin = deployer.address;
+  const treasury = deployer.address;
 
-  if (name == "mainnet") {
-    if (!process.env.KEY_MAINNET) {
-      throw new Error("Missing private key, refer to README 'Deployment' section");
-    }
-    if (!config.Admin[name] || config.Admin[name] === constants.ZERO_ADDRESS) {
-      throw new Error("Missing admin address, refer to README 'Deployment' section");
-    }
-    if (!config.Treasury[name] || config.Treasury[name] === constants.ZERO_ADDRESS) {
-      throw new Error("Missing treasury address, refer to README 'Deployment' section");
-    }
-    if (!config.Syrup[name] || config.Syrup[name] === constants.ZERO_ADDRESS) {
-      throw new Error("Missing syrup address, refer to README 'Deployment' section");
-    }
-    if (!config.Cake[name] || config.Cake[name] === constants.ZERO_ADDRESS) {
-      throw new Error("Missing syrup address, refer to README 'Deployment' section");
-    }
-    if (!config.MasterChef[name] || config.MasterChef[name] === constants.ZERO_ADDRESS) {
-      throw new Error("Missing master address, refer to README 'Deployment' section");
-    }
-  }
+  const beraSleep = await BeraSleepTokenContract.deploy();
+  const syrup = await SyrupContract.deploy(beraSleep.address);
 
-  console.log("Deploying to network:", network);
+  console.log("Deployer address", deployer.address);
+  console.log("BeraSleepToken address: ", beraSleep.address);
+  console.log("SyrupBar address: ", syrup.address);
 
-  let cake, syrup, masterchef, admin, treasury;
+  const MasterchefContract = await ethers.getContractFactory("MasterChef");
+  const masterchef = await MasterchefContract.deploy(
+    beraSleep.address,
+    syrup.address,
+    admin,
+    ethers.BigNumber.from("1"),
+    currentBlock
+  );
 
-  if (name == "mainnet") {
-    admin = config.Admin[name];
-    treasury = config.Treasury[name];
-    cake = config.Cake[name];
-    syrup = config.Syrup[name];
-    masterchef = config.MasterChef[name];
-  } else {
-    console.log("Deploying mocks");
-    const CakeContract = await ethers.getContractFactory("CakeToken");
-    const SyrupContract = await ethers.getContractFactory("SyrupBar");
-    const MasterChefContract = await ethers.getContractFactory("MasterChef");
-    const currentBlock = await ethers.provider.getBlockNumber();
+  const BeraSleepVaultContract = await ethers.getContractFactory("BeraSleepVault");
+  const beraSleepVault = await BeraSleepVaultContract.deploy(
+    beraSleep.address,
+    syrup.address,
+    masterchef.address,
+    admin,
+    treasury
+  );
+  const VaultOwnerContract = await ethers.getContractFactory("VaultOwner");
+  const vaultOwner = await VaultOwnerContract.deploy(beraSleep.address);
 
-    if (name === "hardhat") {
-      const [deployer] = await ethers.getSigners();
-      admin = deployer.address;
-      treasury = deployer.address;
-    } else {
-      admin = config.Admin[name];
-      treasury = config.Treasury[name];
-    }
-
-    cake = (await CakeContract.deploy()).address;
-    await cake.deployed();
-    syrup = (await SyrupContract.deploy(cake)).address;
-    await syrup.deployed();
-    masterchef = (await MasterChefContract.deploy(cake, syrup, admin, ethers.BigNumber.from("1"), currentBlock))
-      .address;
-
-    await masterchef.deployed();
-
-    console.log("Admin:", admin);
-    console.log("Treasury:", treasury);
-    console.log("Cake deployed to:", cake);
-    console.log("Syrup deployed to:", syrup);
-    console.log("MasterChef deployed to:", masterchef);
-  }
-
-  console.log("Deploying Cake Vault...");
-
-  const CakeVaultContract = await ethers.getContractFactory("CakeVault");
-  const cakeVault = await CakeVaultContract.deploy(cake, syrup, masterchef, admin, treasury);
-  await cakeVault.deployed();
-
-  console.log("CakeVault deployed to:", cakeVault.address);
+  console.log("MasterChefContract address: ", masterchef.address);
+  console.log("BeraSleepVaultContract address: ", beraSleepVault.address);
+  console.log("VaultOwner deployed to:", vaultOwner.address);
 };
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    console.error("error", error);
     process.exit(1);
   });

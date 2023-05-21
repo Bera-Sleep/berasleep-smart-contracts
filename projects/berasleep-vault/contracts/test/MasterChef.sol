@@ -15,7 +15,7 @@ interface IMigratorChef {
 // MasterChef is the master of BeraSleep. He can make BeraSleep and he is a fair guy.
 //
 // Note that it's ownable and the owner wields tremendous power. The ownership
-// will be transferred to a governance smart contract once CAKE is sufficiently
+// will be transferred to a governance smart contract once BERASLEEP is sufficiently
 // distributed and the community can show to govern itself.
 //
 // Have fun reading it. Hopefully it's bug-free. God bless.
@@ -28,7 +28,7 @@ contract MasterChef is Ownable {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
         //
-        // We do some fancy math here. Basically, any point in time, the amount of CAKEs
+        // We do some fancy math here. Basically, any point in time, the amount of BERASLEEPs
         // entitled to a user but is pending to be distributed is:
         //
         //   pending reward = (user.amount * pool.accBeraSleepPerShare) - user.rewardDebt
@@ -43,20 +43,20 @@ contract MasterChef is Ownable {
     // Info of each pool.
     struct PoolInfo {
         IERC20 lpToken; // Address of LP token contract.
-        uint256 allocPoint; // How many allocation points assigned to this pool. CAKEs to distribute per block.
-        uint256 lastRewardBlock; // Last block number that CAKEs distribution occurs.
-        uint256 accBeraSleepPerShare; // Accumulated CAKEs per share, times 1e12. See below.
+        uint256 allocPoint; // How many allocation points assigned to this pool. BERASLEEPs to distribute per block.
+        uint256 lastRewardBlock; // Last block number that BERASLEEPs distribution occurs.
+        uint256 accBeraSleepPerShare; // Accumulated BERASLEEPs per share, times 1e12. See below.
     }
 
-    // The CAKE TOKEN!
-    BeraSleepToken public cake;
+    // The BERASLEEP TOKEN!
+    BeraSleepToken public beraSleep;
     // The SYRUP TOKEN!
     SyrupBar public syrup;
     // Dev address.
     address public devaddr;
-    // CAKE tokens created per block.
-    uint256 public cakePerBlock;
-    // Bonus muliplier for early cake makers.
+    // BERASLEEP tokens created per block.
+    uint256 public beraSleepPerBlock;
+    // Bonus muliplier for early berasleep makers.
     uint256 public BONUS_MULTIPLIER = 1;
     // The migrator contract. It has a lot of power. Can only be set through governance (owner).
     IMigratorChef public migrator;
@@ -67,7 +67,7 @@ contract MasterChef is Ownable {
     mapping(uint256 => mapping(address => UserInfo)) public userInfo;
     // Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
-    // The block number when CAKE mining starts.
+    // The block number when BERASLEEP mining starts.
     uint256 public startBlock;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -75,21 +75,21 @@ contract MasterChef is Ownable {
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     constructor(
-        BeraSleepToken _cake,
+        BeraSleepToken _beraSleep,
         SyrupBar _syrup,
         address _devaddr,
-        uint256 _cakePerBlock,
+        uint256 _beraSleepPerBlock,
         uint256 _startBlock
     ) public {
-        cake = _cake;
+        beraSleep = _beraSleep;
         syrup = _syrup;
         devaddr = _devaddr;
-        cakePerBlock = _cakePerBlock;
+        beraSleepPerBlock = _beraSleepPerBlock;
         startBlock = _startBlock;
 
         // staking pool
         poolInfo.push(
-            PoolInfo({lpToken: _cake, allocPoint: 1000, lastRewardBlock: startBlock, accBeraSleepPerShare: 0})
+            PoolInfo({lpToken: _beraSleep, allocPoint: 1000, lastRewardBlock: startBlock, accBeraSleepPerShare: 0})
         );
 
         totalAllocPoint = 1000;
@@ -126,7 +126,7 @@ contract MasterChef is Ownable {
         updateStakingPool();
     }
 
-    // Update the given pool's CAKE allocation point. Can only be called by the owner.
+    // Update the given pool's BERASLEEP allocation point. Can only be called by the owner.
     function set(
         uint256 _pid,
         uint256 _allocPoint,
@@ -178,7 +178,7 @@ contract MasterChef is Ownable {
         return _to.sub(_from).mul(BONUS_MULTIPLIER);
     }
 
-    // View function to see pending CAKEs on frontend.
+    // View function to see pending BERASLEEPs on frontend.
     function pendingBeraSleep(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
@@ -186,8 +186,8 @@ contract MasterChef is Ownable {
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 cakeReward = multiplier.mul(cakePerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            accBeraSleepPerShare = accBeraSleepPerShare.add(cakeReward.mul(1e12).div(lpSupply));
+            uint256 beraSleepReward = multiplier.mul(beraSleepPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+            accBeraSleepPerShare = accBeraSleepPerShare.add(beraSleepReward.mul(1e12).div(lpSupply));
         }
         return user.amount.mul(accBeraSleepPerShare).div(1e12).sub(user.rewardDebt);
     }
@@ -212,16 +212,16 @@ contract MasterChef is Ownable {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 cakeReward = multiplier.mul(cakePerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-        cake.mint(devaddr, cakeReward.div(10));
-        cake.mint(address(syrup), cakeReward);
-        pool.accBeraSleepPerShare = pool.accBeraSleepPerShare.add(cakeReward.mul(1e12).div(lpSupply));
+        uint256 beraSleepReward = multiplier.mul(beraSleepPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+        beraSleep.mint(devaddr, beraSleepReward.div(10));
+        beraSleep.mint(address(syrup), beraSleepReward);
+        pool.accBeraSleepPerShare = pool.accBeraSleepPerShare.add(beraSleepReward.mul(1e12).div(lpSupply));
         pool.lastRewardBlock = block.number;
     }
 
-    // Deposit LP tokens to MasterChef for CAKE allocation.
+    // Deposit LP tokens to MasterChef for BERASLEEP allocation.
     function deposit(uint256 _pid, uint256 _amount) public {
-        require(_pid != 0, "deposit CAKE by staking");
+        require(_pid != 0, "deposit BERASLEEP by staking");
 
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
@@ -242,7 +242,7 @@ contract MasterChef is Ownable {
 
     // Withdraw LP tokens from MasterChef.
     function withdraw(uint256 _pid, uint256 _amount) public {
-        require(_pid != 0, "withdraw CAKE by unstaking");
+        require(_pid != 0, "withdraw BERASLEEP by unstaking");
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
@@ -260,7 +260,7 @@ contract MasterChef is Ownable {
         emit Withdraw(msg.sender, _pid, _amount);
     }
 
-    // Stake CAKE tokens to MasterChef
+    // Stake BERASLEEP tokens to MasterChef
     function enterStaking(uint256 _amount) public {
         PoolInfo storage pool = poolInfo[0];
         UserInfo storage user = userInfo[0][msg.sender];
@@ -281,7 +281,7 @@ contract MasterChef is Ownable {
         emit Deposit(msg.sender, 0, _amount);
     }
 
-    // Withdraw CAKE tokens from STAKING.
+    // Withdraw BERASLEEP tokens from STAKING.
     function leaveStaking(uint256 _amount) public {
         PoolInfo storage pool = poolInfo[0];
         UserInfo storage user = userInfo[0][msg.sender];
@@ -311,7 +311,7 @@ contract MasterChef is Ownable {
         user.rewardDebt = 0;
     }
 
-    // Safe cake transfer function, just in case if rounding error causes pool to not have enough CAKEs.
+    // Safe beraSleep transfer function, just in case if rounding error causes pool to not have enough BERASLEEPs.
     function safeBeraSleepTransfer(address _to, uint256 _amount) internal {
         syrup.safeBeraSleepTransfer(_to, _amount);
     }
