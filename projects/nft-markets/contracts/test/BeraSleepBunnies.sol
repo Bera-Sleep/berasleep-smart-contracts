@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-/** @title PancakeBunnies.
- * @notice It is the contracts for PancakeSwap NFTs.
+/** @title BeraSleepBunnies.
+ * @notice It is the contracts for BeraSleepSwap NFTs.
  */
-contract PancakeBunnies is ERC721, Ownable {
+contract BeraSleepBunnies is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     // Map the number of tokens per bunnyId
@@ -26,7 +26,7 @@ contract PancakeBunnies is ERC721, Ownable {
     // Map the bunnyName for a tokenId
     mapping(uint8 => string) private bunnyNames;
 
-    constructor() ERC721("Pancake Bunnies", "PB") {
+    constructor() ERC721("BeraSleep Bunnies", "BB") {
         //
     }
 

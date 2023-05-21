@@ -9,15 +9,15 @@ const main = async () => {
   const _ipfsURIBunny10 = "";
   const _ipfsURIBunny11 = "";
   const _maxViewLength = "10";
-  const _thresholdBunny10 = "";
-  const _thresholdBunny11 = "";
+  const _thresholdBunny10 = "1";
+  const _thresholdBunny11 = "1";
 
   const BunnySpecialV1 = await ethers.getContractFactory("BunnySpecialV1");
 
   const bunnySpecialV1 = await BunnySpecialV1.deploy(
     config.BunnyMintingStation[currentNetwork],
-    config.CakeToken[currentNetwork],
-    config.PancakeProfile[currentNetwork],
+    config.BeraSleepToken[currentNetwork],
+    config.BeraSleepProfile[currentNetwork],
     _maxViewLength
   );
 

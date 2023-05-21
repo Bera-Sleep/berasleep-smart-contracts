@@ -4,10 +4,10 @@ pragma solidity ^0.8.0;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 import {ICollectionWhitelistChecker} from "./interfaces/ICollectionWhitelistChecker.sol";
-import {IPancakeBunnies} from "./interfaces/IPancakeBunnies.sol";
+import {IBeraSleepBunnies} from "./interfaces/IBeraSleepBunnies.sol";
 
-contract PancakeBunniesWhitelistChecker is Ownable, ICollectionWhitelistChecker {
-    IPancakeBunnies public pancakeBunnies;
+contract BeraSleepBunniesWhitelistChecker is Ownable, ICollectionWhitelistChecker {
+    IBeraSleepBunnies public beraSleepBunnies;
 
     mapping(uint8 => bool) public isBunnyIdRestricted;
 
@@ -16,10 +16,10 @@ contract PancakeBunniesWhitelistChecker is Ownable, ICollectionWhitelistChecker 
 
     /**
      * @notice Constructor
-     * @param _pancakeBunniesAddress: PancakeBunnies contract
+     * @param _beraSleepBunniesAddress: BeraSleepBunnies contract
      */
-    constructor(address _pancakeBunniesAddress) {
-        pancakeBunnies = IPancakeBunnies(_pancakeBunniesAddress);
+    constructor(address _beraSleepBunniesAddress) {
+        beraSleepBunnies = IBeraSleepBunnies(_beraSleepBunniesAddress);
     }
 
     /**
@@ -53,7 +53,7 @@ contract PancakeBunniesWhitelistChecker is Ownable, ICollectionWhitelistChecker 
      * @param _tokenId: tokenId of the NFT to list
      */
     function canList(uint256 _tokenId) external view override returns (bool) {
-        uint8 bunnyId = pancakeBunnies.getBunnyId(_tokenId);
+        uint8 bunnyId = beraSleepBunnies.getBunnyId(_tokenId);
 
         return !isBunnyIdRestricted[bunnyId];
     }

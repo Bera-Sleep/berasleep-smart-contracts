@@ -30,8 +30,8 @@ export default {
     testnet: "0x24ec6962dbe874F6B67B5C50857565667fA0854F",
   },
   BunnyMintingStation: {
-    mainnet: "0x78c2d17edb8a34fa00dd602994f16964d3fb4bab",
-    testnet: "0x95bdc68b0e8977e1c99caa06c6397dec59694387",
+    mainnet: "0x0000000000000000000000000000000000000000",
+    testnet: "0x255F3F09cB7F3584901D2cB8BA6FfE91E4a5dBca",
   },
   BeraSleepToken: {
     mainnet: "0x0000000000000000000000000000000000000000",
@@ -61,13 +61,13 @@ export default {
     mainnet: "0x9b872C05C38A3563393668839659bA336Cc969B2",
     testnet: "",
   },
-  PancakeBunnies: {
+  BeraSleepBunnies: {
     mainnet: "0xDf7952B35f24aCF7fC0487D01c8d5690a60DBa07",
-    testnet: "0x60935F36e4631F73f0f407e68642144e07aC7f5E",
+    testnet: "0xe9Bd12AEEDc8b322911b2AB0201c567272D16BeC",
   },
-  PancakeProfile: {
+  BeraSleepProfile: {
     mainnet: "0xDf4dBf6536201370F95e06A0F8a7a70fE40E388a",
-    testnet: "0x4B683C7E13B6d5D7fd1FeA9530F451954c1A7c8A",
+    testnet: "0xAec50Cc30f13Ce836c81314f83486a6A06D75BD2",
   },
   Lottery: {
     mainnet: "0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c",
