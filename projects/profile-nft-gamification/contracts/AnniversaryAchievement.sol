@@ -2,14 +2,14 @@
 pragma solidity ^0.6.12;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {PancakeProfile} from "./PancakeProfile.sol";
+import {BeraSleepProfile} from "./BeraSleepProfile.sol";
 
 /**
  * @title AnniversaryAchievement.
  * @notice It is a contract to distribute points for 1st anniversary.
  */
 contract AnniversaryAchievement is Ownable {
-    PancakeProfile public pancakeProfile;
+    BeraSleepProfile public beraSleepProfile;
 
     uint256 public campaignId;
     uint256 public numberPoints;
@@ -25,20 +25,20 @@ contract AnniversaryAchievement is Ownable {
 
     /**
      * @notice Constructor
-     * @param _pancakeProfile: Pancake Profile
+     * @param _beraSleepProfile: Pancake Profile
      * @param _numberPoints: number of points to give
      * @param _thresholdPoints: number of points required to claim
      * @param _campaignId: campaign id
      * @param _endBlock: end block for claiming
      */
     constructor(
-        address _pancakeProfile,
+        address _beraSleepProfile,
         uint256 _numberPoints,
         uint256 _thresholdPoints,
         uint256 _campaignId,
         uint256 _endBlock
     ) public {
-        pancakeProfile = PancakeProfile(_pancakeProfile);
+        beraSleepProfile = BeraSleepProfile(_beraSleepProfile);
         numberPoints = _numberPoints;
         thresholdPoints = _thresholdPoints;
         campaignId = _campaignId;
@@ -54,7 +54,7 @@ contract AnniversaryAchievement is Ownable {
 
         hasClaimed[msg.sender] = true;
 
-        pancakeProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
+        beraSleepProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
     }
 
     /**
@@ -98,11 +98,11 @@ contract AnniversaryAchievement is Ownable {
      * @param _user: user address
      */
     function canClaim(address _user) public view returns (bool) {
-        if (!pancakeProfile.getUserStatus(_user)) {
+        if (!beraSleepProfile.getUserStatus(_user)) {
             return false;
         }
 
-        (, uint256 numberUserPoints, , , , ) = pancakeProfile.getUserProfile(_user);
+        (, uint256 numberUserPoints, , , , ) = beraSleepProfile.getUserProfile(_user);
 
         return (!hasClaimed[_user]) && (block.number < endBlock) && (numberUserPoints >= thresholdPoints);
     }

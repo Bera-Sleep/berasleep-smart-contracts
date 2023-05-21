@@ -7,7 +7,7 @@ import "bsc-library/contracts/IBEP20.sol";
 import "bsc-library/contracts/SafeBEP20.sol";
 
 import "./BunnyMintingStation.sol";
-import "./PancakeProfile.sol";
+import "./BeraSleepProfile.sol";
 
 /** @title BunnySpecialV1.
  * @notice It is a contract for users to mint exclusive NFTs
@@ -18,9 +18,9 @@ contract BunnySpecialV1 is Ownable {
     using SafeMath for uint256;
 
     BunnyMintingStation public bunnyMintingStation;
-    PancakeProfile public pancakeProfile;
+    BeraSleepProfile public beraSleepProfile;
 
-    IBEP20 public cakeToken;
+    IBEP20 public beraSleepToken;
 
     uint256 public maxViewLength;
     uint256 public numberDifferentBunnies;
@@ -37,7 +37,7 @@ contract BunnySpecialV1 is Ownable {
     struct Bunnies {
         string tokenURI; // e.g. ipfsHash/hiccups.json
         uint256 thresholdUser; // e.g. 1900 or 100000
-        uint256 cakeCost;
+        uint256 beraSleepCost;
         bool isActive;
         bool isCreated;
     }
@@ -53,13 +53,13 @@ contract BunnySpecialV1 is Ownable {
 
     constructor(
         BunnyMintingStation _bunnyMintingStation,
-        IBEP20 _cakeToken,
-        PancakeProfile _pancakeProfile,
+        IBEP20 _beraSleepToken,
+        BeraSleepProfile _beraSleepProfile,
         uint256 _maxViewLength
     ) public {
         bunnyMintingStation = _bunnyMintingStation;
-        cakeToken = _cakeToken;
-        pancakeProfile = _pancakeProfile;
+        beraSleepToken = _beraSleepToken;
+        beraSleepProfile = _beraSleepProfile;
         maxViewLength = _maxViewLength;
     }
 
@@ -80,15 +80,15 @@ contract BunnySpecialV1 is Ownable {
         uint256 userId;
         bool isUserActive;
 
-        (userId, , , , , isUserActive) = pancakeProfile.getUserProfile(senderAddress);
+        (userId, , , , , isUserActive) = beraSleepProfile.getUserProfile(senderAddress);
 
         require(userId < bunnyCharacteristics[_bunnyId].thresholdUser, "ERR_USER_NOT_ELIGIBLE");
 
         require(isUserActive, "ERR_USER_NOT_ACTIVE");
 
         // Check if there is any cost associated with getting the bunny
-        if (bunnyCharacteristics[_bunnyId].cakeCost > 0) {
-            cakeToken.safeTransferFrom(senderAddress, address(this), bunnyCharacteristics[_bunnyId].cakeCost);
+        if (bunnyCharacteristics[_bunnyId].beraSleepCost > 0) {
+            beraSleepToken.safeTransferFrom(senderAddress, address(this), bunnyCharacteristics[_bunnyId].beraSleepCost);
         }
 
         // Update that _msgSender() has claimed
@@ -107,7 +107,7 @@ contract BunnySpecialV1 is Ownable {
         uint8 _bunnyId,
         string calldata _tokenURI,
         uint256 _thresholdUser,
-        uint256 _cakeCost
+        uint256 _beraSleepCost
     ) external onlyOwner {
         require(!bunnyCharacteristics[_bunnyId].isCreated, "ERR_CREATED");
         require(_bunnyId >= previousNumberBunnyIds, "ERR_ID_LOW_2");
@@ -115,14 +115,14 @@ contract BunnySpecialV1 is Ownable {
         bunnyCharacteristics[_bunnyId] = Bunnies({
             tokenURI: _tokenURI,
             thresholdUser: _thresholdUser,
-            cakeCost: _cakeCost,
+            beraSleepCost: _beraSleepCost,
             isActive: true,
             isCreated: true
         });
 
         numberDifferentBunnies = numberDifferentBunnies.add(1);
 
-        emit BunnyAdd(_bunnyId, _thresholdUser, _cakeCost);
+        emit BunnyAdd(_bunnyId, _thresholdUser, _beraSleepCost);
     }
 
     /**
@@ -130,21 +130,21 @@ contract BunnySpecialV1 is Ownable {
      * Only callable by the owner.
      */
     function claimFee(uint256 _amount) external onlyOwner {
-        cakeToken.safeTransfer(_msgSender(), _amount);
+        beraSleepToken.safeTransfer(_msgSender(), _amount);
     }
 
     function updateBunny(
         uint8 _bunnyId,
         uint256 _thresholdUser,
-        uint256 _cakeCost,
+        uint256 _beraSleepCost,
         bool _isActive
     ) external onlyOwner {
         require(bunnyCharacteristics[_bunnyId].isCreated, "ERR_NOT_CREATED");
         bunnyCharacteristics[_bunnyId].thresholdUser = _thresholdUser;
-        bunnyCharacteristics[_bunnyId].cakeCost = _cakeCost;
+        bunnyCharacteristics[_bunnyId].beraSleepCost = _beraSleepCost;
         bunnyCharacteristics[_bunnyId].isActive = _isActive;
 
-        emit BunnyChange(_bunnyId, _thresholdUser, _cakeCost, _isActive);
+        emit BunnyChange(_bunnyId, _thresholdUser, _beraSleepCost, _isActive);
     }
 
     function updateMaxViewLength(uint256 _newMaxViewLength) external onlyOwner {
@@ -152,13 +152,13 @@ contract BunnySpecialV1 is Ownable {
     }
 
     function canClaimSingle(address _userAddress, uint8 _bunnyId) external view returns (bool) {
-        if (!pancakeProfile.hasRegistered(_userAddress)) {
+        if (!beraSleepProfile.hasRegistered(_userAddress)) {
             return false;
         } else {
             uint256 userId;
             bool userStatus;
 
-            (userId, , , , , userStatus) = pancakeProfile.getUserProfile(_userAddress);
+            (userId, , , , , userStatus) = beraSleepProfile.getUserProfile(_userAddress);
 
             if (!userStatus) {
                 return false;
@@ -172,14 +172,14 @@ contract BunnySpecialV1 is Ownable {
     function canClaimMultiple(address _userAddress, uint8[] calldata _bunnyIds) external view returns (bool[] memory) {
         require(_bunnyIds.length <= maxViewLength, "ERR_LENGTH_VIEW");
 
-        if (!pancakeProfile.hasRegistered(_userAddress)) {
+        if (!beraSleepProfile.hasRegistered(_userAddress)) {
             bool[] memory responses = new bool[](0);
             return responses;
         } else {
             uint256 userId;
             bool userStatus;
 
-            (userId, , , , , userStatus) = pancakeProfile.getUserProfile(_userAddress);
+            (userId, , , , , userStatus) = beraSleepProfile.getUserProfile(_userAddress);
 
             if (!userStatus) {
                 bool[] memory responses = new bool[](0);

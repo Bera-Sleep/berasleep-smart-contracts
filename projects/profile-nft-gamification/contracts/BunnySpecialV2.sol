@@ -7,7 +7,7 @@ import "bsc-library/contracts/IBEP20.sol";
 import "bsc-library/contracts/SafeBEP20.sol";
 
 import "./BunnyMintingStation.sol";
-import "./PancakeProfile.sol";
+import "./BeraSleepProfile.sol";
 
 /** @title BunnySpecialV2.
  * @notice It is a contract for users to mint exclusive Easter
@@ -18,9 +18,9 @@ contract BunnySpecialV2 is Ownable {
     using SafeMath for uint256;
 
     BunnyMintingStation public bunnyMintingStation;
-    PancakeProfile public pancakeProfile;
+    BeraSleepProfile public beraSleepProfile;
 
-    IBEP20 public cakeToken;
+    IBEP20 public beraSleepToken;
 
     uint8 public constant previousNumberBunnyIds = 12;
 
@@ -46,14 +46,14 @@ contract BunnySpecialV2 is Ownable {
 
     constructor(
         BunnyMintingStation _bunnyMintingStation,
-        IBEP20 _cakeToken,
-        PancakeProfile _pancakeProfile,
+        IBEP20 _beraSleepToken,
+        BeraSleepProfile _beraSleepProfile,
         uint256 _thresholdUser,
         uint256 _endBlock
     ) public {
         bunnyMintingStation = _bunnyMintingStation;
-        cakeToken = _cakeToken;
-        pancakeProfile = _pancakeProfile;
+        beraSleepToken = _beraSleepToken;
+        beraSleepProfile = _beraSleepProfile;
         thresholdUser = _thresholdUser;
         endBlock = _endBlock;
     }
@@ -74,7 +74,7 @@ contract BunnySpecialV2 is Ownable {
         uint256 userTeamId;
         bool isUserActive;
 
-        (userId, , userTeamId, , , isUserActive) = pancakeProfile.getUserProfile(senderAddress);
+        (userId, , userTeamId, , , isUserActive) = beraSleepProfile.getUserProfile(senderAddress);
 
         require(userId < thresholdUser, "ERR_USER_NOT_ELIGIBLE");
         require(isUserActive, "ERR_USER_NOT_ACTIVE");
@@ -135,11 +135,11 @@ contract BunnySpecialV2 is Ownable {
         if (hasClaimed[_userAddress]) {
             return false;
         } else {
-            if (!pancakeProfile.getUserStatus(_userAddress)) {
+            if (!beraSleepProfile.getUserStatus(_userAddress)) {
                 return false;
             } else {
                 uint256 userId;
-                (userId, , , , , ) = pancakeProfile.getUserProfile(_userAddress);
+                (userId, , , , , ) = beraSleepProfile.getUserProfile(_userAddress);
 
                 if (userId < thresholdUser) {
                     return true;

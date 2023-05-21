@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-/** @title IPancakeProfile.
+/** @title IBeraSleepProfile.
  */
-interface IPancakeProfile {
+interface IBeraSleepProfile {
     function createProfile(
         uint256 _teamId,
         address _nftAddress,

@@ -10,25 +10,25 @@ import "@openzeppelin/contracts/token/ERC721/ERC721Holder.sol";
 import "bsc-library/contracts/IBEP20.sol";
 import "bsc-library/contracts/SafeBEP20.sol";
 
-/** @title PancakeProfile.
+/** @title BeraSleepProfile.
  * @notice It is a contract for users to bind their address
  * to a customizable profile by depositing a NFT.
  */
-contract PancakeProfile is AccessControl, ERC721Holder {
+contract BeraSleepProfile is AccessControl, ERC721Holder {
     using Counters for Counters.Counter;
     using SafeBEP20 for IBEP20;
     using SafeMath for uint256;
 
-    IBEP20 public cakeToken;
+    IBEP20 public beraSleepToken;
 
     bytes32 public constant NFT_ROLE = keccak256("NFT_ROLE");
     bytes32 public constant POINT_ROLE = keccak256("POINT_ROLE");
     bytes32 public constant SPECIAL_ROLE = keccak256("SPECIAL_ROLE");
 
     uint256 public numberActiveProfiles;
-    uint256 public numberCakeToReactivate;
-    uint256 public numberCakeToRegister;
-    uint256 public numberCakeToUpdate;
+    uint256 public numberBeraSleepToReactivate;
+    uint256 public numberBeraSleepToRegister;
+    uint256 public numberBeraSleepToUpdate;
     uint256 public numberTeams;
 
     mapping(address => bool) public hasRegistered;
@@ -104,15 +104,15 @@ contract PancakeProfile is AccessControl, ERC721Holder {
     }
 
     constructor(
-        IBEP20 _cakeToken,
-        uint256 _numberCakeToReactivate,
-        uint256 _numberCakeToRegister,
-        uint256 _numberCakeToUpdate
+        IBEP20 _beraSleepToken,
+        uint256 _numberBeraSleepToReactivate,
+        uint256 _numberBeraSleepToRegister,
+        uint256 _numberBeraSleepToUpdate
     ) public {
-        cakeToken = _cakeToken;
-        numberCakeToReactivate = _numberCakeToReactivate;
-        numberCakeToRegister = _numberCakeToRegister;
-        numberCakeToUpdate = _numberCakeToUpdate;
+        beraSleepToken = _beraSleepToken;
+        numberBeraSleepToReactivate = _numberBeraSleepToReactivate;
+        numberBeraSleepToRegister = _numberBeraSleepToRegister;
+        numberBeraSleepToUpdate = _numberBeraSleepToUpdate;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
@@ -139,7 +139,7 @@ contract PancakeProfile is AccessControl, ERC721Holder {
         nftToken.safeTransferFrom(_msgSender(), address(this), _tokenId);
 
         // Transfer CAKE tokens to this contract
-        cakeToken.safeTransferFrom(_msgSender(), address(this), numberCakeToRegister);
+        beraSleepToken.safeTransferFrom(_msgSender(), address(this), numberBeraSleepToRegister);
 
         // Increment the _countUsers counter and get userId
         _countUsers.increment();
@@ -227,7 +227,7 @@ contract PancakeProfile is AccessControl, ERC721Holder {
         nftNewToken.safeTransferFrom(_msgSender(), address(this), _tokenId);
 
         // Transfer CAKE token to this address
-        cakeToken.safeTransferFrom(_msgSender(), address(this), numberCakeToUpdate);
+        beraSleepToken.safeTransferFrom(_msgSender(), address(this), numberBeraSleepToUpdate);
 
         // Interface to deposit the NFT contract
         IERC721 nftCurrentToken = IERC721(currentAddress);
@@ -256,7 +256,7 @@ contract PancakeProfile is AccessControl, ERC721Holder {
         require(_msgSender() == nftToken.ownerOf(_tokenId), "Only NFT owner can update");
 
         // Transfer to this address
-        cakeToken.safeTransferFrom(_msgSender(), address(this), numberCakeToReactivate);
+        beraSleepToken.safeTransferFrom(_msgSender(), address(this), numberBeraSleepToReactivate);
 
         // Transfer NFT to contract
         nftToken.safeTransferFrom(_msgSender(), address(this), _tokenId);
@@ -419,7 +419,7 @@ contract PancakeProfile is AccessControl, ERC721Holder {
      * Callable only by owner admins.
      */
     function claimFee(uint256 _amount) external onlyOwner {
-        cakeToken.safeTransfer(_msgSender(), _amount);
+        beraSleepToken.safeTransfer(_msgSender(), _amount);
     }
 
     /**
@@ -464,14 +464,14 @@ contract PancakeProfile is AccessControl, ERC721Holder {
      * @dev Update the number of CAKE to register
      * Callable only by owner admins.
      */
-    function updateNumberCake(
-        uint256 _newNumberCakeToReactivate,
-        uint256 _newNumberCakeToRegister,
-        uint256 _newNumberCakeToUpdate
+    function updateNumberBeraSleep(
+        uint256 _newNumberBeraSleepToReactivate,
+        uint256 _newNumberBeraSleepToRegister,
+        uint256 _newNumberBeraSleepToUpdate
     ) external onlyOwner {
-        numberCakeToReactivate = _newNumberCakeToReactivate;
-        numberCakeToRegister = _newNumberCakeToRegister;
-        numberCakeToUpdate = _newNumberCakeToUpdate;
+        numberBeraSleepToReactivate = _newNumberBeraSleepToReactivate;
+        numberBeraSleepToRegister = _newNumberBeraSleepToRegister;
+        numberBeraSleepToUpdate = _newNumberBeraSleepToUpdate;
     }
 
     /**

@@ -7,18 +7,18 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "berasleep-vault/contracts/BeraSleepVault.sol";
 
 import "./BunnyMintingStation.sol";
-import "./PancakeProfile.sol";
+import "./BeraSleepProfile.sol";
 
 /**
- * @title BunnySpecialCakeVault.
+ * @title BunnySpecialBeraSleepVault.
  * @notice It is a contract for users to mint Cake Vault collectible.
  */
-contract BunnySpecialCakeVault is Ownable {
+contract BunnySpecialBeraSleepVault is Ownable {
     using SafeMath for uint256;
 
     BunnyMintingStation public bunnyMintingStation;
-    CakeVault public cakeVault;
-    PancakeProfile public pancakeProfile;
+    BeraSleepVault public beraSleepVault;
+    BeraSleepProfile public beraSleepProfile;
 
     uint8 public constant bunnyId = 16;
 
@@ -26,7 +26,7 @@ contract BunnySpecialCakeVault is Ownable {
     uint256 public endBlock;
     uint256 public thresholdTimestamp;
 
-    // PancakeSwap Profile related.
+    // BeraSleep Profile related.
     uint256 public numberPoints;
     uint256 public campaignId;
 
@@ -42,18 +42,18 @@ contract BunnySpecialCakeVault is Ownable {
     event NewThresholdTimestamp(uint256 thresholdTimestamp);
 
     constructor(
-        address _cakeVault,
+        address _beraSleepVault,
         address _bunnyMintingStation,
-        address _pancakeProfile,
+        address _beraSleepProfile,
         uint256 _endBlock,
         uint256 _thresholdTimestamp,
         uint256 _numberPoints,
         uint256 _campaignId,
         string memory _tokenURI
     ) public {
-        cakeVault = CakeVault(_cakeVault);
+        beraSleepVault = BeraSleepVault(_beraSleepVault);
         bunnyMintingStation = BunnyMintingStation(_bunnyMintingStation);
-        pancakeProfile = PancakeProfile(_pancakeProfile);
+        beraSleepProfile = BeraSleepProfile(_beraSleepProfile);
         endBlock = _endBlock;
         thresholdTimestamp = _thresholdTimestamp;
         numberPoints = _numberPoints;
@@ -72,7 +72,7 @@ contract BunnySpecialCakeVault is Ownable {
         require(!hasClaimed[msg.sender], "ERR_HAS_CLAIMED");
 
         bool isUserActive;
-        (, , , , , isUserActive) = pancakeProfile.getUserProfile(msg.sender);
+        (, , , , , isUserActive) = beraSleepProfile.getUserProfile(msg.sender);
 
         require(isUserActive, "ERR_USER_NOT_ACTIVE");
 
@@ -87,14 +87,14 @@ contract BunnySpecialCakeVault is Ownable {
         // Mint collectible and send it to the user.
         uint256 tokenId = bunnyMintingStation.mintCollectible(msg.sender, tokenURI, bunnyId);
 
-        // Increase point on PancakeSwap profile, for a given campaignId.
-        pancakeProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
+        // Increase point on BeraSleep profile, for a given campaignId.
+        beraSleepProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
 
         emit BunnyMint(msg.sender, tokenId, bunnyId);
     }
 
     /**
-     * @notice Change the campaignId for PancakeSwap Profile.
+     * @notice Change the campaignId for BeraSleep Profile.
      * @dev Only callable by owner.
      */
     function changeCampaignId(uint256 _campaignId) external onlyOwner {
@@ -114,7 +114,7 @@ contract BunnySpecialCakeVault is Ownable {
     }
 
     /**
-     * @notice Change the number of points for PancakeSwap Profile.
+     * @notice Change the number of points for BeraSleep Profile.
      * @dev Only callable by owner.
      */
     function changeNumberPoints(uint256 _numberPoints) external onlyOwner {
@@ -147,11 +147,11 @@ contract BunnySpecialCakeVault is Ownable {
         if (hasClaimed[_userAddress]) {
             return false;
         } else {
-            if (!pancakeProfile.getUserStatus(_userAddress)) {
+            if (!beraSleepProfile.getUserStatus(_userAddress)) {
                 return false;
             } else {
                 uint256 lastDepositedTime;
-                (, lastDepositedTime, , ) = cakeVault.userInfo(_userAddress);
+                (, lastDepositedTime, , ) = beraSleepVault.userInfo(_userAddress);
 
                 if (lastDepositedTime != 0) {
                     if (lastDepositedTime < thresholdTimestamp) {

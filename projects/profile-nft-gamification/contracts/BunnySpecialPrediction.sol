@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "predictions/contracts/BnbPricePrediction.sol";
 
 import "./BunnyMintingStation.sol";
-import "./PancakeProfile.sol";
+import "./BeraSleepProfile.sol";
 
 /**
  * @title BunnySpecialPrediction.
@@ -18,8 +18,8 @@ contract BunnySpecialPrediction is Ownable {
     using SafeMath for uint256;
 
     BunnyMintingStation public bunnyMintingStation;
-    PancakeProfile public pancakeProfile;
-    BnbPricePrediction public pancakePrediction;
+    BeraSleepProfile public beraSleepProfile;
+    BnbPricePrediction public beraSleepPrediction;
 
     uint8 public constant bunnyId = 17;
 
@@ -43,18 +43,18 @@ contract BunnySpecialPrediction is Ownable {
     event NewCampaignId(uint256 campaignId);
 
     constructor(
-        address _pancakePrediction,
+        address _beraSleepPrediction,
         address _bunnyMintingStation,
-        address _pancakeProfile,
+        address _beraSleepProfile,
         uint256 _endBlock,
         uint256 _thresholdRound,
         uint256 _numberPoints,
         uint256 _campaignId,
         string memory _tokenURI
     ) public {
-        pancakePrediction = BnbPricePrediction(_pancakePrediction);
+        beraSleepPrediction = BnbPricePrediction(_beraSleepPrediction);
         bunnyMintingStation = BunnyMintingStation(_bunnyMintingStation);
-        pancakeProfile = PancakeProfile(_pancakeProfile);
+        beraSleepProfile = BeraSleepProfile(_beraSleepProfile);
         endBlock = _endBlock;
         thresholdRound = _thresholdRound;
         numberPoints = _numberPoints;
@@ -73,7 +73,7 @@ contract BunnySpecialPrediction is Ownable {
         require(!hasClaimed[msg.sender], "ERR_HAS_CLAIMED");
 
         bool isUserActive;
-        (, , , , , isUserActive) = pancakeProfile.getUserProfile(msg.sender);
+        (, , , , , isUserActive) = beraSleepProfile.getUserProfile(msg.sender);
 
         // Check that msg.sender has an active profile
         require(isUserActive, "ERR_USER_NOT_ACTIVE");
@@ -91,7 +91,7 @@ contract BunnySpecialPrediction is Ownable {
         uint256 tokenId = bunnyMintingStation.mintCollectible(msg.sender, tokenURI, bunnyId);
 
         // Increase point on PancakeSwap profile, for a given campaignId.
-        pancakeProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
+        beraSleepProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
 
         emit BunnyMint(msg.sender, tokenId, bunnyId);
     }
@@ -150,11 +150,11 @@ contract BunnySpecialPrediction is Ownable {
         if (hasClaimed[_userAddress]) {
             return false;
         } else {
-            if (!pancakeProfile.getUserStatus(_userAddress)) {
+            if (!beraSleepProfile.getUserStatus(_userAddress)) {
                 return false;
             } else {
                 uint256[] memory roundId;
-                (roundId, ) = pancakePrediction.getUserRounds(_userAddress, 0, 1);
+                (roundId, ) = beraSleepPrediction.getUserRounds(_userAddress, 0, 1);
 
                 if (roundId.length > 0) {
                     if (roundId[0] <= thresholdRound) {

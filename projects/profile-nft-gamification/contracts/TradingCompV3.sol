@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721Holder.sol";
 import "bsc-library/contracts/IBEP20.sol";
 import "bsc-library/contracts/SafeBEP20.sol";
 
-import "./interfaces/IPancakeProfile.sol";
+import "./interfaces/IBeraSleepProfile.sol";
 import "./BunnyMintingStation.sol";
 
 /** @title TradingCompV3.
@@ -19,12 +19,12 @@ contract TradingCompV3 is Ownable, ERC721Holder {
     using SafeBEP20 for IBEP20;
 
     BunnyMintingStation public immutable bunnyMintingStation;
-    IBEP20 public immutable cakeToken;
+    IBEP20 public immutable beraSleepToken;
     IBEP20 public immutable moboxToken;
     IBEP20 public immutable moboxMisteryBoxToken;
     IERC721Enumerable public moboxAvatarNFTCollection;
 
-    IPancakeProfile public immutable pancakeProfile;
+    IBeraSleepProfile public immutable beraSleepProfile;
 
     uint256 public constant numberTeams = 3;
 
@@ -49,8 +49,8 @@ contract TradingCompV3 is Ownable, ERC721Holder {
 
     struct CompetitionRewards {
         uint256[5] userCampaignId; // campaignId for user increase
-        uint256[5] cakeRewards; // cake rewards per group
-        uint256[5] moboxRewards; // cake rewards per group
+        uint256[5] beraSleepRewards; // beraSleep rewards per group
+        uint256[5] moboxRewards; // BeraSleep rewards per group
         uint256[5] pointUsers; // number of points per user
     }
 
@@ -71,24 +71,24 @@ contract TradingCompV3 is Ownable, ERC721Holder {
 
     /**
      * @notice It initializes the contract.
-     * @param _pancakeProfileAddress: PancakeProfile address
+     * @param _beraSleepProfileAddress: BeraSleepProfile address
      * @param _bunnyStationAddress: BunnyMintingStation address
-     * @param _cakeTokenAddress: the address of the CAKE token
+     * @param _beraSleepTokenAddress: the address of the CAKE token
      * @param _moboxTokenAddress: the address of the MOBOX token
      * @param _moboxMisteryBoxTokenAddress: the address of the MOBOX mystery box token
      * @param _competitionId: competition uniq id
      */
     constructor(
-        address _pancakeProfileAddress,
+        address _beraSleepProfileAddress,
         address _bunnyStationAddress,
-        address _cakeTokenAddress,
+        address _beraSleepTokenAddress,
         address _moboxTokenAddress,
         address _moboxMisteryBoxTokenAddress,
         uint256 _competitionId
     ) public {
-        pancakeProfile = IPancakeProfile(_pancakeProfileAddress);
+        beraSleepProfile = IBeraSleepProfile(_beraSleepProfileAddress);
         bunnyMintingStation = BunnyMintingStation(_bunnyStationAddress);
-        cakeToken = IBEP20(_cakeTokenAddress);
+        beraSleepToken = IBEP20(_beraSleepTokenAddress);
         moboxToken = IBEP20(_moboxTokenAddress);
         moboxMisteryBoxToken = IBEP20(_moboxMisteryBoxTokenAddress);
         competitionId = _competitionId;
@@ -115,7 +115,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
         uint256 registeredUserTeamId = userTradingStats[senderAddress].teamId;
         bool isUserActive;
         uint256 userTeamId;
-        (, , userTeamId, , , isUserActive) = pancakeProfile.getUserProfile(senderAddress);
+        (, , userTeamId, , , isUserActive) = beraSleepProfile.getUserProfile(senderAddress);
 
         require(isUserActive, "NOT_ACTIVE");
         require(userTeamId == registeredUserTeamId, "USER_TEAM_HAS_CHANGED");
@@ -128,7 +128,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
         CompetitionRewards memory userRewards = _rewardCompetitions[registeredUserTeamId];
 
         if (userRewardGroup > 0) {
-            cakeToken.safeTransfer(senderAddress, userRewards.cakeRewards[userRewardGroup]);
+            beraSleepToken.safeTransfer(senderAddress, userRewards.beraSleepRewards[userRewardGroup]);
             moboxToken.safeTransfer(senderAddress, userRewards.moboxRewards[userRewardGroup]);
 
             // TOP 100 users
@@ -144,7 +144,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
         }
 
         // User collects points
-        pancakeProfile.increaseUserPoints(
+        beraSleepProfile.increaseUserPoints(
             senderAddress,
             userRewards.pointUsers[userRewardGroup],
             userRewards.userCampaignId[userRewardGroup]
@@ -153,7 +153,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
 
     /**
      * @notice It allows users to register for trading competition
-     * @dev Only callable if the user has an active PancakeProfile.
+     * @dev Only callable if the user has an active BeraSleepProfile.
      */
     function register() external {
         address senderAddress = _msgSender();
@@ -168,7 +168,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
         uint256 userTeamId;
         bool isUserActive;
 
-        (, , userTeamId, , , isUserActive) = pancakeProfile.getUserProfile(senderAddress);
+        (, , userTeamId, , , isUserActive) = beraSleepProfile.getUserProfile(senderAddress);
 
         require(isUserActive, "NOT_ACTIVE");
 
@@ -211,7 +211,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
      */
     function claimCakeRemainder(uint256 _amount) external onlyOwner {
         require(currentStatus == CompetitionStatus.Over, "NOT_OVER");
-        cakeToken.safeTransfer(_msgSender(), _amount);
+        beraSleepToken.safeTransfer(_msgSender(), _amount);
     }
 
     /**
@@ -249,21 +249,21 @@ contract TradingCompV3 is Ownable, ERC721Holder {
      * @dev Only callable by owner.
      * @param _teamId: the teamId
      * @param _userCampaignIds: campaignIds for each user group for teamId
-     * @param _cakeRewards: CAKE rewards for each user group for teamId
+     * @param _beraSleepRewards: CAKE rewards for each user group for teamId
      * @param _moboxRewards: MOBOX rewards for each user group for teamId
      * @param _pointRewards: point to collect for each user group for teamId
      */
     function updateTeamRewards(
         uint256 _teamId,
         uint256[5] calldata _userCampaignIds,
-        uint256[5] calldata _cakeRewards,
+        uint256[5] calldata _beraSleepRewards,
         uint256[5] calldata _moboxRewards,
         uint256[5] calldata _pointRewards
     ) external onlyOwner {
         require((_teamId > 0) && (_teamId <= numberTeams), "NOT_VALID_TEAM_ID");
         require(currentStatus == CompetitionStatus.Close, "NOT_CLOSED");
         _rewardCompetitions[_teamId].userCampaignId = _userCampaignIds;
-        _rewardCompetitions[_teamId].cakeRewards = _cakeRewards;
+        _rewardCompetitions[_teamId].beraSleepRewards = _beraSleepRewards;
         _rewardCompetitions[_teamId].moboxRewards = _moboxRewards;
         _rewardCompetitions[_teamId].pointUsers = _pointRewards;
 
@@ -355,7 +355,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
         )
     {
         bool isUserActive;
-        (, , , , , isUserActive) = pancakeProfile.getUserProfile(_userAddress);
+        (, , , , , isUserActive) = beraSleepProfile.getUserProfile(_userAddress);
         UserStats memory userStats = userTradingStats[_userAddress];
         bool hasUserRegistered = userStats.hasRegistered;
         if ((currentStatus != CompetitionStatus.Claiming) && (currentStatus != CompetitionStatus.Over)) {
@@ -377,7 +377,7 @@ contract TradingCompV3 is Ownable, ERC721Holder {
                 isUserActive,
                 userStats.hasClaimed,
                 userRewardGroup,
-                compRewards.cakeRewards[userRewardGroup],
+                compRewards.beraSleepRewards[userRewardGroup],
                 compRewards.moboxRewards[userRewardGroup],
                 compRewards.pointUsers[userRewardGroup],
                 userStats.canClaimMysteryBox,
