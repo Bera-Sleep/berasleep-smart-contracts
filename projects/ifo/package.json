@@ -13,7 +13,7 @@
   "dependencies": {
     "bsc-library": "1.0.0",
     "profile-nft-gamification": "2.0.0",
-    "pancake-cake-vault": "1.0.0"
+    "berasleep-vault": "1.0.0"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^3.2.0"

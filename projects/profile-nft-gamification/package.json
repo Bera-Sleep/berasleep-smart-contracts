@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "bsc-library": "1.0.0",
-    "pancake-cake-vault": "1.0.0",
+    "berasleep-vault": "1.0.0",
     "predictions": "1.0.1"
   },
   "devDependencies": {

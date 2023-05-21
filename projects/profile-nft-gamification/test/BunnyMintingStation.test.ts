@@ -19,7 +19,7 @@ const BunnySpecialLottery = artifacts.require("./BunnySpecialLottery.sol");
 const BunnySpecialAdmin = artifacts.require("./BunnySpecialAdmin.sol");
 
 // CAKE VAULT
-const CakeVault = artifacts.require("pancake-cake-vault/contracts/CakeVault.sol");
+const CakeVault = artifacts.require("berasleep-vault/contracts/BeraSleepVault.sol");
 const CakeToken = artifacts.require("./test/CakeToken.sol");
 const SyrupBar = artifacts.require("./test/SyrupBar.sol");
 const MasterChef = artifacts.require("./test/MasterChef.sol");

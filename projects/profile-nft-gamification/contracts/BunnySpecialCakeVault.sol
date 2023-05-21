@@ -4,7 +4,7 @@ pragma solidity ^0.6.12;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
-import "pancake-cake-vault/contracts/CakeVault.sol";
+import "berasleep-vault/contracts/BeraSleepVault.sol";
 
 import "./BunnyMintingStation.sol";
 import "./PancakeProfile.sol";

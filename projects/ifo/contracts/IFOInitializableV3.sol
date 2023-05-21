@@ -10,10 +10,10 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "profile-nft-gamification/contracts/PancakeProfile.sol";
 
 import "./interfaces/IIFOV2.sol";
-import "pancake-cake-vault/contracts/IFOPool.sol";
-import "pancake-cake-vault/contracts/test/CakeToken.sol";
-import "pancake-cake-vault/contracts/test/SyrupBar.sol";
-import "pancake-cake-vault/contracts/test/MasterChef.sol";
+import "berasleep-vault/contracts/IFOPool.sol";
+import "berasleep-vault/contracts/test/BeraSleepToken.sol";
+import "berasleep-vault/contracts/test/SyrupBar.sol";
+import "berasleep-vault/contracts/test/MasterChef.sol";
 
 /**
  * @title IFOInitializableV3
