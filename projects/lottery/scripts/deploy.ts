@@ -27,11 +27,15 @@ const main = async (withVRFOnTestnet = false) => {
     console.log("RandomNumberGenerator deployed to:", randomNumberGenerator.address);
     randomNumberGeneratorContract = randomNumberGenerator;
   }
-  const pancakeSwapLottery = await BeraSleepLottery.deploy(beraSleepToken, randomNumberGeneratorContract.address);
-  console.log("BeraSleepLottery deployed to:", pancakeSwapLottery.address);
+  const beraSleepLottery = await BeraSleepLottery.deploy(beraSleepToken, randomNumberGeneratorContract.address);
+  console.log("BeraSleepLottery deployed to:", beraSleepLottery.address);
 
   // Set lottery address
-  await randomNumberGeneratorContract.setLotteryAddress(pancakeSwapLottery.address);
+  await randomNumberGeneratorContract.setLotteryAddress(beraSleepLottery.address);
+
+  const LotteryNFT = await ethers.getContractFactory("LotteryNFT");
+  const lotteryNFT = await LotteryNFT.deploy();
+  console.log("LotteryNFT deployed to:", lotteryNFT.address);
 };
 
 main()
