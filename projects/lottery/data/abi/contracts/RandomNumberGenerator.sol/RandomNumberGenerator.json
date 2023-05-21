@@ -36,6 +36,19 @@
   },
   {
     "inputs": [],
+    "name": "beraSleepLottery",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "fee",
     "outputs": [
       {
@@ -114,19 +127,6 @@
   },
   {
     "inputs": [],
-    "name": "pancakeSwapLottery",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "randomResult",
     "outputs": [
       {
@@ -193,7 +193,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pancakeSwapLottery",
+        "name": "_beraSleepLottery",
         "type": "address"
       }
     ],

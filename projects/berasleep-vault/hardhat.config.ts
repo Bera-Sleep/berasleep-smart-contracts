@@ -29,9 +29,8 @@ const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {},
-    // testnet: bscTestnet,
+    testnet: ftmTest,
     // mainnet: bscMainnet,
-    test: ftmTest,
   },
   solidity: {
     version: "0.6.12",
