@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-import "profile-nft-gamification/contracts/PancakeProfile.sol";
+import "profile-nft-gamification/contracts/BeraSleepProfile.sol";
 
 import "./interfaces/IIFOV2.sol";
 import "berasleep-vault/contracts/IFOPool.sol";
@@ -37,8 +37,8 @@ contract IFOInitializableV3 is IIFOV2, ReentrancyGuard, Ownable {
     // The offering token
     IERC20 public offeringToken;
 
-    // PancakeProfile
-    PancakeProfile public pancakeProfile;
+    // BeraSleepProfile
+    BeraSleepProfile public beraSleepProfile;
 
     // IFOPool contract
     IFOPool public ifoPool;
@@ -132,7 +132,7 @@ contract IFOInitializableV3 is IIFOV2, ReentrancyGuard, Ownable {
      * @dev It can only be called once.
      * @param _lpToken: the LP token used
      * @param _offeringToken: the token that is offered for the IFO
-     * @param _pancakeProfileAddress: the address of the PancakeProfile
+     * @param _beraSleepProfileAddress: the address of the BeraSleepProfile
      * @param _ifoPoolAddress: the address of the IFOPool
      * @param _startBlock: the start block for the IFO
      * @param _endBlock: the end block for the IFO
@@ -142,7 +142,7 @@ contract IFOInitializableV3 is IIFOV2, ReentrancyGuard, Ownable {
     function initialize(
         address _lpToken,
         address _offeringToken,
-        address _pancakeProfileAddress,
+        address _beraSleepProfileAddress,
         uint256 _startBlock,
         uint256 _endBlock,
         uint256 _maxBufferBlocks,
@@ -157,7 +157,7 @@ contract IFOInitializableV3 is IIFOV2, ReentrancyGuard, Ownable {
 
         lpToken = IERC20(_lpToken);
         offeringToken = IERC20(_offeringToken);
-        pancakeProfile = PancakeProfile(_pancakeProfileAddress);
+        beraSleepProfile = BeraSleepProfile(_beraSleepProfileAddress);
         ifoPool = IFOPool(_ifoPoolAddress);
         startBlock = _startBlock;
         endBlock = _endBlock;
@@ -174,7 +174,7 @@ contract IFOInitializableV3 is IIFOV2, ReentrancyGuard, Ownable {
      */
     function depositPool(uint256 _amount, uint8 _pid) external override nonReentrant notContract {
         // Checks whether the user has an active profile
-        require(pancakeProfile.getUserStatus(msg.sender), "Deposit: Must have an active profile");
+        require(beraSleepProfile.getUserStatus(msg.sender), "Deposit: Must have an active profile");
 
         // Checks whether the pool id is valid
         require(_pid < NUMBER_POOLS, "Deposit: Non valid pool id");
@@ -515,7 +515,7 @@ contract IFOInitializableV3 is IIFOV2, ReentrancyGuard, Ownable {
             if (sumPools > thresholdPoints) {
                 _hasClaimedPoints[_user] = true;
                 // Increase user points
-                pancakeProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
+                beraSleepProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
             }
         }
     }

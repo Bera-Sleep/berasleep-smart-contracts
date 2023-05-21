@@ -7,14 +7,14 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-import "profile-nft-gamification/contracts/PancakeProfile.sol";
+import "profile-nft-gamification/contracts/BeraSleepProfile.sol";
 
 import "./interfaces/IIFOV2.sol";
 
 /**
  * @title IFOV2
  * @notice It is an upgrade of the original IFO model with 2 pools and
- * other PancakeProfile requirements.
+ * other BeraSleepProfile requirements.
  */
 contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
     using SafeMath for uint256;
@@ -26,8 +26,8 @@ contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
     // The offering token
     IERC20 public offeringToken;
 
-    // PancakeProfile
-    PancakeProfile public pancakeProfile;
+    // BeraSleepProfile
+    BeraSleepProfile public beraSleepProfile;
 
     // Number of pools
     uint8 public constant numberPools = 2;
@@ -105,7 +105,7 @@ contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
      * @dev It can only be called once.
      * @param _lpToken: the LP token used
      * @param _offeringToken: the token that is offered for the IFO
-     * @param _pancakeProfileAddress: the address of the PancakeProfile
+     * @param _beraSleepProfileAddress: the address of the BeraSleepProfile
      * @param _startBlock: the start block for the IFO
      * @param _endBlock: the end block for the IFO
      * @param _adminAddress: the admin address for handling tokens
@@ -113,7 +113,7 @@ contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
     constructor(
         address _lpToken,
         address _offeringToken,
-        address _pancakeProfileAddress,
+        address _beraSleepProfileAddress,
         uint256 _startBlock,
         uint256 _endBlock,
         address _adminAddress
@@ -124,7 +124,7 @@ contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
 
         lpToken = IERC20(_lpToken);
         offeringToken = IERC20(_offeringToken);
-        pancakeProfile = PancakeProfile(_pancakeProfileAddress);
+        beraSleepProfile = BeraSleepProfile(_beraSleepProfileAddress);
         startBlock = _startBlock;
         endBlock = _endBlock;
         transferOwnership(_adminAddress);
@@ -137,7 +137,7 @@ contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
      */
     function depositPool(uint256 _amount, uint8 _pid) external override nonReentrant notContract {
         // Checks whether the user has an active profile
-        require(pancakeProfile.getUserStatus(msg.sender), "Deposit: Must have an active profile");
+        require(beraSleepProfile.getUserStatus(msg.sender), "Deposit: Must have an active profile");
 
         // Checks whether the pool id is valid
         require(_pid < numberPools, "Deposit: Non valid pool id");
@@ -460,7 +460,7 @@ contract IFOV2 is IIFOV2, ReentrancyGuard, Ownable {
             if (sumPools > thresholdPoints) {
                 _hasClaimedPoints[_user] = true;
                 // Increase user points
-                pancakeProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
+                beraSleepProfile.increaseUserPoints(msg.sender, numberPoints, campaignId);
             }
         }
     }
