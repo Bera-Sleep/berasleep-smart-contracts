@@ -1,0 +1,14 @@
+export default {
+  MasterChefV2: {
+    mainnet: "0x0000000000000000000000000000000000000000",
+    testnet: "0xc9c6dc96Ac75609497D42De5fDA41c0c8BDD33c3",
+  },
+  BeraSleep: {
+    mainnet: "0x0000000000000000000000000000000000000000",
+    testnet: "0xC938173CccA0f3C917A0dC799B3dbEF89626fE2B",
+  },
+  BeraSleepPool: {
+    mainnet: "0x0000000000000000000000000000000000000000",
+    testnet: "0xAE06cF3a2247aea8217e95E2e26b440bfB7C9b99",
+  },
+};

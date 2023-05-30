@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "BeraSleep contracts",
   "private": true,
-  "workspaces": [
-    "projects/**"
-  ],
+  "workspaces": ["projects/**"],
   "repository": "https://github.com/Bera-Sleep/berasleep-smart-contracts",
   "author": "BeraSleep",
   "license": "MIT",
