@@ -34,11 +34,7 @@ contract IBeraSleep is Ownable {
      * @param _admin: admin of the this contract
      * @param _ceiling: the max locked duration which the linear decrease start
      */
-    constructor(
-        IBeraSleepPool _beraSleepPool,
-        address _admin,
-        uint256 _ceiling
-    ) public {
+    constructor(IBeraSleepPool _beraSleepPool, address _admin, uint256 _ceiling) public {
         require(_ceiling >= MIN_CEILING_DURATION, "Invalid ceiling duration");
         beraSleepPool = _beraSleepPool;
         admin = _admin;

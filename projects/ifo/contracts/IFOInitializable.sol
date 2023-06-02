@@ -373,19 +373,9 @@ contract IFOInitializable is IIFOV2, ReentrancyGuard, Ownable {
      * @return totalAmountPool: total amount pool deposited (in LP tokens)
      * @return sumTaxesOverflow: total taxes collected (starts at 0, increases with each harvest if overflow)
      */
-    function viewPoolInformation(uint256 _pid)
-        external
-        view
-        override
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            bool,
-            uint256,
-            uint256
-        )
-    {
+    function viewPoolInformation(
+        uint256 _pid
+    ) external view override returns (uint256, uint256, uint256, bool, uint256, uint256) {
         return (
             _poolInformation[_pid].raisingAmountPool,
             _poolInformation[_pid].offeringAmountPool,
@@ -417,12 +407,10 @@ contract IFOInitializable is IIFOV2, ReentrancyGuard, Ownable {
      * @param _pids[]: array of pids
      * @return
      */
-    function viewUserAllocationPools(address _user, uint8[] calldata _pids)
-        external
-        view
-        override
-        returns (uint256[] memory)
-    {
+    function viewUserAllocationPools(
+        address _user,
+        uint8[] calldata _pids
+    ) external view override returns (uint256[] memory) {
         uint256[] memory allocationPools = new uint256[](_pids.length);
         for (uint8 i = 0; i < _pids.length; i++) {
             allocationPools[i] = _getUserAllocationPool(_user, _pids[i]);
@@ -435,12 +423,10 @@ contract IFOInitializable is IIFOV2, ReentrancyGuard, Ownable {
      * @param _user: user address
      * @param _pids[]: array of pids
      */
-    function viewUserInfo(address _user, uint8[] calldata _pids)
-        external
-        view
-        override
-        returns (uint256[] memory, bool[] memory)
-    {
+    function viewUserInfo(
+        address _user,
+        uint8[] calldata _pids
+    ) external view override returns (uint256[] memory, bool[] memory) {
         uint256[] memory amountPools = new uint256[](_pids.length);
         bool[] memory statusPools = new bool[](_pids.length);
 
@@ -456,12 +442,10 @@ contract IFOInitializable is IIFOV2, ReentrancyGuard, Ownable {
      * @param _user: user address
      * @param _pids: array of pids
      */
-    function viewUserOfferingAndRefundingAmountsForPools(address _user, uint8[] calldata _pids)
-        external
-        view
-        override
-        returns (uint256[3][] memory)
-    {
+    function viewUserOfferingAndRefundingAmountsForPools(
+        address _user,
+        uint8[] calldata _pids
+    ) external view override returns (uint256[3][] memory) {
         uint256[3][] memory amountPools = new uint256[3][](_pids.length);
 
         for (uint8 i = 0; i < _pids.length; i++) {
@@ -505,11 +489,10 @@ contract IFOInitializable is IIFOV2, ReentrancyGuard, Ownable {
      * @dev 100,000,000,000 means 0.1 (10%) / 1 means 0.0000000000001 (0.0000001%) / 1,000,000,000,000 means 1 (100%)
      * @return It returns the tax percentage
      */
-    function _calculateTaxOverflow(uint256 _totalAmountPool, uint256 _raisingAmountPool)
-        internal
-        pure
-        returns (uint256)
-    {
+    function _calculateTaxOverflow(
+        uint256 _totalAmountPool,
+        uint256 _raisingAmountPool
+    ) internal pure returns (uint256) {
         uint256 ratioOverflow = _totalAmountPool.div(_raisingAmountPool);
 
         if (ratioOverflow >= 500) {
@@ -532,15 +515,10 @@ contract IFOInitializable is IIFOV2, ReentrancyGuard, Ownable {
      * @return {uint256, uint256, uint256} It returns the offering amount, the refunding amount (in LP tokens),
      * and the tax (if any, else 0)
      */
-    function _calculateOfferingAndRefundingAmountsPool(address _user, uint8 _pid)
-        internal
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256
-        )
-    {
+    function _calculateOfferingAndRefundingAmountsPool(
+        address _user,
+        uint8 _pid
+    ) internal view returns (uint256, uint256, uint256) {
         uint256 userOfferingAmount;
         uint256 userRefundingAmount;
         uint256 taxAmount;

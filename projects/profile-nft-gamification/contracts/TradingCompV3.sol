@@ -292,10 +292,10 @@ contract TradingCompV3 is Ownable, ERC721Holder {
      * @param _addressesToUpdate: the array of addresses
      * @param _canClaimMysteryBox: flag for mystery box
      */
-    function updateUserStatusMysteryBox(address[] calldata _addressesToUpdate, bool _canClaimMysteryBox)
-        external
-        onlyOwner
-    {
+    function updateUserStatusMysteryBox(
+        address[] calldata _addressesToUpdate,
+        bool _canClaimMysteryBox
+    ) external onlyOwner {
         require(currentStatus == CompetitionStatus.Close, "NOT_CLOSED");
         for (uint256 i = 0; i < _addressesToUpdate.length; i++) {
             userTradingStats[_addressesToUpdate[i]].canClaimMysteryBox = _canClaimMysteryBox;
@@ -339,21 +339,9 @@ contract TradingCompV3 is Ownable, ERC721Holder {
      * @return canClaimMysteryBox: whether the user gets/got a mystery box
      * @return canClaimNFT: whether the user gets/got a NFT
      */
-    function claimInformation(address _userAddress)
-        external
-        view
-        returns (
-            bool,
-            bool,
-            bool,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            bool,
-            bool
-        )
-    {
+    function claimInformation(
+        address _userAddress
+    ) external view returns (bool, bool, bool, uint256, uint256, uint256, uint256, bool, bool) {
         bool isUserActive;
         (, , , , , isUserActive) = beraSleepProfile.getUserProfile(_userAddress);
         UserStats memory userStats = userTradingStats[_userAddress];

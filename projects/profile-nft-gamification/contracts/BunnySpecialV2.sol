@@ -97,11 +97,7 @@ contract BunnySpecialV2 is Ownable {
      * @notice Add/modify bunnyId for a teamId and metadata
      * @dev Only callable by owner.
      */
-    function addBunny(
-        uint8 _bunnyId,
-        uint256 _teamId,
-        string calldata _tokenURI
-    ) external onlyOwner {
+    function addBunny(uint8 _bunnyId, uint256 _teamId, string calldata _tokenURI) external onlyOwner {
         require(_bunnyId >= previousNumberBunnyIds, "ERR_ID_LOW_2");
 
         teamIdToBunnyId[_teamId] = _bunnyId;

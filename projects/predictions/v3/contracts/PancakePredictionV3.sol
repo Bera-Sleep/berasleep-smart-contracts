@@ -336,11 +336,10 @@ contract PancakePredictionV3 is Ownable, Pausable, ReentrancyGuard {
      * @notice Set buffer and interval (in seconds)
      * @dev Callable by admin
      */
-    function setBufferAndIntervalSeconds(uint256 _bufferSeconds, uint256 _intervalSeconds)
-        external
-        whenPaused
-        onlyAdmin
-    {
+    function setBufferAndIntervalSeconds(
+        uint256 _bufferSeconds,
+        uint256 _intervalSeconds
+    ) external whenPaused onlyAdmin {
         require(_bufferSeconds < _intervalSeconds, "bufferSeconds must be inferior to intervalSeconds");
         bufferSeconds = _bufferSeconds;
         intervalSeconds = _intervalSeconds;
@@ -440,15 +439,7 @@ contract PancakePredictionV3 is Ownable, Pausable, ReentrancyGuard {
         address user,
         uint256 cursor,
         uint256 size
-    )
-        external
-        view
-        returns (
-            uint256[] memory,
-            BetInfo[] memory,
-            uint256
-        )
-    {
+    ) external view returns (uint256[] memory, BetInfo[] memory, uint256) {
         uint256 length = size;
 
         if (length > userRounds[user].length - cursor) {
@@ -552,11 +543,7 @@ contract PancakePredictionV3 is Ownable, Pausable, ReentrancyGuard {
      * @param roundId: roundId
      * @param price: price of the round
      */
-    function _safeEndRound(
-        uint256 epoch,
-        uint256 roundId,
-        int256 price
-    ) internal {
+    function _safeEndRound(uint256 epoch, uint256 roundId, int256 price) internal {
         require(rounds[epoch].lockTimestamp != 0, "Can only end round after round has locked");
         require(block.timestamp >= rounds[epoch].closeTimestamp, "Can only end round after closeTimestamp");
         require(
@@ -577,11 +564,7 @@ contract PancakePredictionV3 is Ownable, Pausable, ReentrancyGuard {
      * @param roundId: roundId
      * @param price: price of the round
      */
-    function _safeLockRound(
-        uint256 epoch,
-        uint256 roundId,
-        int256 price
-    ) internal {
+    function _safeLockRound(uint256 epoch, uint256 roundId, int256 price) internal {
         require(rounds[epoch].startTimestamp != 0, "Can only lock round after round has started");
         require(block.timestamp >= rounds[epoch].lockTimestamp, "Can only lock round after lockTimestamp");
         require(

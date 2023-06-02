@@ -85,11 +85,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
      * @param _pancakeProfileIsRequested: Pancake Profile is requested
      * @param _pancakeProfileThresholdPoints: Pancake Profile need threshold points
      */
-    constructor(
-        address _pancakeProfile,
-        bool _pancakeProfileIsRequested,
-        uint256 _pancakeProfileThresholdPoints
-    ) {
+    constructor(address _pancakeProfile, bool _pancakeProfileIsRequested, uint256 _pancakeProfileThresholdPoints) {
         SMART_CHEF_FACTORY = msg.sender;
 
         // Call to verify the address is correct
@@ -145,7 +141,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
         uint256 decimalsRewardToken = uint256(rewardToken.decimals());
         require(decimalsRewardToken < 30, "Must be inferior to 30");
 
-        PRECISION_FACTOR = uint256(10**(uint256(30) - decimalsRewardToken));
+        PRECISION_FACTOR = uint256(10 ** (uint256(30) - decimalsRewardToken));
 
         // Set the lastRewardBlock as the startBlock
         lastRewardBlock = startBlock;
@@ -333,10 +329,10 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
      * @param _isRequested: the profile is requested
      * @param _thresholdPoints: the threshold points
      */
-    function updateProfileAndThresholdPointsRequirement(bool _isRequested, uint256 _thresholdPoints)
-        external
-        onlyOwner
-    {
+    function updateProfileAndThresholdPointsRequirement(
+        bool _isRequested,
+        uint256 _thresholdPoints
+    ) external onlyOwner {
         require(_thresholdPoints >= 0, "Threshold points need to exceed 0");
         pancakeProfileIsRequested = _isRequested;
         pancakeProfileThresholdPoints = _thresholdPoints;

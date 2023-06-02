@@ -94,7 +94,7 @@ contract SmartChef is Ownable, ReentrancyGuard {
         uint256 decimalsRewardToken = uint256(rewardToken.decimals());
         require(decimalsRewardToken < 30, "Must be inferior to 30");
 
-        PRECISION_FACTOR = uint256(10**(uint256(30).sub(decimalsRewardToken)));
+        PRECISION_FACTOR = uint256(10 ** (uint256(30).sub(decimalsRewardToken)));
 
         // Set the lastRewardBlock as the startBlock
         lastRewardBlock = startBlock;

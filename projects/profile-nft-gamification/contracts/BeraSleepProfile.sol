@@ -120,11 +120,7 @@ contract BeraSleepProfile is AccessControl, ERC721Holder {
      * @dev To create a user profile. It sends the NFT to the contract
      * and sends CAKE to burn address. Requires 2 token approvals.
      */
-    function createProfile(
-        uint256 _teamId,
-        address _nftAddress,
-        uint256 _tokenId
-    ) external {
+    function createProfile(uint256 _teamId, address _nftAddress, uint256 _tokenId) external {
         require(!hasRegistered[_msgSender()], "Already registered");
         require((_teamId <= numberTeams) && (_teamId > 0), "Invalid teamId");
         require(teams[_teamId].isJoinable, "Team not joinable");
@@ -281,11 +277,7 @@ contract BeraSleepProfile is AccessControl, ERC721Holder {
      * @dev To increase the number of points for a user.
      * Callable only by point admins
      */
-    function increaseUserPoints(
-        address _userAddress,
-        uint256 _numberPoints,
-        uint256 _campaignId
-    ) external onlyPoint {
+    function increaseUserPoints(address _userAddress, uint256 _numberPoints, uint256 _campaignId) external onlyPoint {
         // Increase the number of points for the user
         users[_userAddress].numberPoints = users[_userAddress].numberPoints.add(_numberPoints);
 
@@ -313,11 +305,7 @@ contract BeraSleepProfile is AccessControl, ERC721Holder {
      * Callable only by point admins
      */
 
-    function increaseTeamPoints(
-        uint256 _teamId,
-        uint256 _numberPoints,
-        uint256 _campaignId
-    ) external onlyPoint {
+    function increaseTeamPoints(uint256 _teamId, uint256 _numberPoints, uint256 _campaignId) external onlyPoint {
         // Increase the number of points for the team
         teams[_teamId].numberPoints = teams[_teamId].numberPoints.add(_numberPoints);
 
@@ -477,18 +465,9 @@ contract BeraSleepProfile is AccessControl, ERC721Holder {
     /**
      * @dev Check the user's profile for a given address
      */
-    function getUserProfile(address _userAddress)
-        external
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            address,
-            uint256,
-            bool
-        )
-    {
+    function getUserProfile(
+        address _userAddress
+    ) external view returns (uint256, uint256, uint256, address, uint256, bool) {
         require(hasRegistered[_userAddress], "Not registered");
         return (
             users[_userAddress].userId,
@@ -510,17 +489,9 @@ contract BeraSleepProfile is AccessControl, ERC721Holder {
     /**
      * @dev Check a team's profile
      */
-    function getTeamProfile(uint256 _teamId)
-        external
-        view
-        returns (
-            string memory,
-            string memory,
-            uint256,
-            uint256,
-            bool
-        )
-    {
+    function getTeamProfile(
+        uint256 _teamId
+    ) external view returns (string memory, string memory, uint256, uint256, bool) {
         require((_teamId <= numberTeams) && (_teamId > 0), "teamId invalid");
         return (
             teams[_teamId].teamName,

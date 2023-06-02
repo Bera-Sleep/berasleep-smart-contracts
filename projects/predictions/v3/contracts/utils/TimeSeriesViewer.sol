@@ -23,15 +23,7 @@ contract TimeSeriesViewer {
         address aggregator,
         uint80 firstRoundId,
         uint80 lastRoundId
-    )
-        external
-        view
-        returns (
-            uint80[] memory roundIds,
-            int256[] memory prices,
-            uint256[] memory timestamps
-        )
-    {
+    ) external view returns (uint80[] memory roundIds, int256[] memory prices, uint256[] memory timestamps) {
         uint256 numberRounds = lastRoundId - firstRoundId + 1;
 
         roundIds = new uint80[](numberRounds);

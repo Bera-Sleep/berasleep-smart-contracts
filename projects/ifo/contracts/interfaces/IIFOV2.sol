@@ -50,27 +50,15 @@ interface IIFOV2 {
      * @param _thresholdPoints: the amount of LP required to receive points
      * @dev This function is only callable by admin.
      */
-    function updatePointParameters(
-        uint256 _campaignId,
-        uint256 _numberPoints,
-        uint256 _thresholdPoints
-    ) external;
+    function updatePointParameters(uint256 _campaignId, uint256 _numberPoints, uint256 _thresholdPoints) external;
 
     /**
      * @notice It returns the pool information
      * @param _pid: poolId
      */
-    function viewPoolInformation(uint256 _pid)
-        external
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            bool,
-            uint256,
-            uint256
-        );
+    function viewPoolInformation(
+        uint256 _pid
+    ) external view returns (uint256, uint256, uint256, bool, uint256, uint256);
 
     /**
      * @notice It returns the tax overflow rate calculated for a pool
@@ -85,10 +73,10 @@ interface IIFOV2 {
      * @param _user: user address
      * @param _pids[]: array of pids
      */
-    function viewUserInfo(address _user, uint8[] calldata _pids)
-        external
-        view
-        returns (uint256[] memory, bool[] memory);
+    function viewUserInfo(
+        address _user,
+        uint8[] calldata _pids
+    ) external view returns (uint256[] memory, bool[] memory);
 
     /**
      * @notice External view function to see user allocations for both pools
@@ -102,8 +90,8 @@ interface IIFOV2 {
      * @param _user: user address
      * @param _pids: array of pids
      */
-    function viewUserOfferingAndRefundingAmountsForPools(address _user, uint8[] calldata _pids)
-        external
-        view
-        returns (uint256[3][] memory);
+    function viewUserOfferingAndRefundingAmountsForPools(
+        address _user,
+        uint8[] calldata _pids
+    ) external view returns (uint256[3][] memory);
 }

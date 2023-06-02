@@ -168,11 +168,7 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param _tokenId: tokenId of the NFT purchased
      * @param _price: price (must be equal to the askPrice set by the seller)
      */
-    function buyTokenUsingWBNB(
-        address _collection,
-        uint256 _tokenId,
-        uint256 _price
-    ) external nonReentrant {
+    function buyTokenUsingWBNB(address _collection, uint256 _tokenId, uint256 _price) external nonReentrant {
         IERC20(WBNB).safeTransferFrom(address(msg.sender), address(this), _price);
 
         _buyToken(_collection, _tokenId, _price, false);
@@ -218,11 +214,7 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param _tokenId: tokenId of the NFT
      * @param _askPrice: price for listing (in wei)
      */
-    function createAskOrder(
-        address _collection,
-        uint256 _tokenId,
-        uint256 _askPrice
-    ) external nonReentrant {
+    function createAskOrder(address _collection, uint256 _tokenId, uint256 _askPrice) external nonReentrant {
         // Verify price is not too low/high
         require(_askPrice >= minimumAskPrice && _askPrice <= maximumAskPrice, "Order: Price not within range");
 
@@ -252,11 +244,7 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param _tokenId: tokenId of the NFT
      * @param _newPrice: new price for listing (in wei)
      */
-    function modifyAskOrder(
-        address _collection,
-        uint256 _tokenId,
-        uint256 _newPrice
-    ) external nonReentrant {
+    function modifyAskOrder(address _collection, uint256 _tokenId, uint256 _newPrice) external nonReentrant {
         // Verify new price is not too low/high
         require(_newPrice >= minimumAskPrice && _newPrice <= maximumAskPrice, "Order: Price not within range");
 
@@ -426,11 +414,10 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param collection: address of the collection
      * @param tokenIds: array of tokenId
      */
-    function viewAsksByCollectionAndTokenIds(address collection, uint256[] calldata tokenIds)
-        external
-        view
-        returns (bool[] memory statuses, Ask[] memory askInfo)
-    {
+    function viewAsksByCollectionAndTokenIds(
+        address collection,
+        uint256[] calldata tokenIds
+    ) external view returns (bool[] memory statuses, Ask[] memory askInfo) {
         uint256 length = tokenIds.length;
 
         statuses = new bool[](length);
@@ -459,15 +446,7 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
         address collection,
         uint256 cursor,
         uint256 size
-    )
-        external
-        view
-        returns (
-            uint256[] memory tokenIds,
-            Ask[] memory askInfo,
-            uint256
-        )
-    {
+    ) external view returns (uint256[] memory tokenIds, Ask[] memory askInfo, uint256) {
         uint256 length = size;
 
         if (length > _askTokenIds[collection].length() - cursor) {
@@ -497,15 +476,7 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
         address seller,
         uint256 cursor,
         uint256 size
-    )
-        external
-        view
-        returns (
-            uint256[] memory tokenIds,
-            Ask[] memory askInfo,
-            uint256
-        )
-    {
+    ) external view returns (uint256[] memory tokenIds, Ask[] memory askInfo, uint256) {
         uint256 length = size;
 
         if (length > _tokenIdsOfSellerForCollection[seller][collection].length() - cursor) {
@@ -528,15 +499,10 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param cursor: cursor
      * @param size: size of the response
      */
-    function viewCollections(uint256 cursor, uint256 size)
-        external
-        view
-        returns (
-            address[] memory collectionAddresses,
-            Collection[] memory collectionDetails,
-            uint256
-        )
-    {
+    function viewCollections(
+        uint256 cursor,
+        uint256 size
+    ) external view returns (address[] memory collectionAddresses, Collection[] memory collectionDetails, uint256) {
         uint256 length = size;
 
         if (length > _collectionAddressSet.length() - cursor) {
@@ -559,15 +525,10 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param collection: address of the collection
      * @param price: listed price
      */
-    function calculatePriceAndFeesForCollection(address collection, uint256 price)
-        external
-        view
-        returns (
-            uint256 netPrice,
-            uint256 tradingFee,
-            uint256 creatorFee
-        )
-    {
+    function calculatePriceAndFeesForCollection(
+        address collection,
+        uint256 price
+    ) external view returns (uint256 netPrice, uint256 tradingFee, uint256 creatorFee) {
         if (_collections[collection].status != CollectionStatus.Open) {
             return (0, 0, 0);
         }
@@ -581,11 +542,10 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param _tokenIds: array of tokenIds
      * @dev if collection is not for trading, it returns array of bool with false
      */
-    function canTokensBeListed(address _collection, uint256[] calldata _tokenIds)
-        external
-        view
-        returns (bool[] memory listingStatuses)
-    {
+    function canTokensBeListed(
+        address _collection,
+        uint256[] calldata _tokenIds
+    ) external view returns (bool[] memory listingStatuses) {
         listingStatuses = new bool[](_tokenIds.length);
 
         if (_collections[_collection].status != CollectionStatus.Open) {
@@ -606,12 +566,7 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param _price: price (must match the askPrice from the seller)
      * @param _withBNB: whether the token is bought with BNB (true) or WBNB (false)
      */
-    function _buyToken(
-        address _collection,
-        uint256 _tokenId,
-        uint256 _price,
-        bool _withBNB
-    ) internal {
+    function _buyToken(address _collection, uint256 _tokenId, uint256 _price, bool _withBNB) internal {
         require(_collections[_collection].status == CollectionStatus.Open, "Collection: Not for trading");
         require(_askTokenIds[_collection].contains(_tokenId), "Buy: Not for sale");
 
@@ -657,15 +612,10 @@ contract ERC721NFTMarketV1 is ERC721Holder, Ownable, ReentrancyGuard {
      * @param _collection: address of the collection
      * @param _askPrice: listed price
      */
-    function _calculatePriceAndFeesForCollection(address _collection, uint256 _askPrice)
-        internal
-        view
-        returns (
-            uint256 netPrice,
-            uint256 tradingFee,
-            uint256 creatorFee
-        )
-    {
+    function _calculatePriceAndFeesForCollection(
+        address _collection,
+        uint256 _askPrice
+    ) internal view returns (uint256 netPrice, uint256 tradingFee, uint256 creatorFee) {
         tradingFee = (_askPrice * _collections[_collection].tradingFee) / 10000;
         creatorFee = (_askPrice * _collections[_collection].creatorFee) / 10000;
 

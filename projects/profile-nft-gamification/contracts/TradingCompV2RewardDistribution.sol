@@ -254,21 +254,9 @@ contract TradingCompV2RewardDistribution is Ownable {
      * @return userPointReward: the number of points to claim/claimed
      * @return canClaimNFT: whether the user gets/got a NFT
      */
-    function claimInformation(address _userAddress)
-        external
-        view
-        returns (
-            bool,
-            bool,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            bool
-        )
-    {
+    function claimInformation(
+        address _userAddress
+    ) external view returns (bool, bool, uint256, uint256, uint256, uint256, uint256, uint256, bool) {
         bool hasUserRegistered;
         bool hasUserClaimed;
         uint256 userRewardGroup;

@@ -60,12 +60,7 @@ contract BeraSleepFlexiblePool is Ownable, Pausable {
      * @param _admin: address of the admin
      * @param _treasury: address of the treasury (collects fees)
      */
-    constructor(
-        IERC20 _token,
-        IBeraSleepPool _beraSleepPool,
-        address _admin,
-        address _treasury
-    ) {
+    constructor(IERC20 _token, IBeraSleepPool _beraSleepPool, address _admin, address _treasury) {
         token = _token;
         beraSleepPool = _beraSleepPool;
         admin = _admin;

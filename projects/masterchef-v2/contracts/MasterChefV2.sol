@@ -122,12 +122,7 @@ contract MasterChefV2 is Ownable, ReentrancyGuard {
     /// @param _BERASLEEP The BERASLEEP token contract address.
     /// @param _MASTER_PID The pool id of the dummy pool on the MCV1.
     /// @param _burnAdmin The address of burn admin.
-    constructor(
-        IMasterChef _MASTER_CHEF,
-        IBEP20 _BERASLEEP,
-        uint256 _MASTER_PID,
-        address _burnAdmin
-    ) public {
+    constructor(IMasterChef _MASTER_CHEF, IBEP20 _BERASLEEP, uint256 _MASTER_PID, address _burnAdmin) public {
         MASTER_CHEF = _MASTER_CHEF;
         BERASLEEP = _BERASLEEP;
         MASTER_PID = _MASTER_PID;
@@ -169,12 +164,7 @@ contract MasterChefV2 is Ownable, ReentrancyGuard {
     /// @param _isRegular Whether the pool is regular or special. LP farms are always "regular". "Special" pools are
     /// @param _withUpdate Whether call "massUpdatePools" operation.
     /// only for BERASLEEP distributions within PancakeSwap products.
-    function add(
-        uint256 _allocPoint,
-        IBEP20 _lpToken,
-        bool _isRegular,
-        bool _withUpdate
-    ) external onlyOwner {
+    function add(uint256 _allocPoint, IBEP20 _lpToken, bool _isRegular, bool _withUpdate) external onlyOwner {
         require(_lpToken.balanceOf(address(this)) >= 0, "None BEP20 tokens");
         // stake BERASLEEP token will cause staked token and reward token mixed up,
         // may cause staked tokens withdraw as reward token,never do it.
@@ -207,11 +197,7 @@ contract MasterChefV2 is Ownable, ReentrancyGuard {
     /// @param _pid The id of the pool. See `poolInfo`.
     /// @param _allocPoint New number of allocation points for the pool.
     /// @param _withUpdate Whether call "massUpdatePools" operation.
-    function set(
-        uint256 _pid,
-        uint256 _allocPoint,
-        bool _withUpdate
-    ) external onlyOwner {
+    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) external onlyOwner {
         // No matter _withUpdate is true or false, we need to execute updatePool once before set the pool parameters.
         updatePool(_pid);
 
@@ -511,11 +497,7 @@ contract MasterChefV2 is Ownable, ReentrancyGuard {
     /// @param _user The user address for settling rewards.
     /// @param _pid The pool id.
     /// @param _boostMultiplier The user boost multiplier in specific pool id.
-    function settlePendingBeraSleep(
-        address _user,
-        uint256 _pid,
-        uint256 _boostMultiplier
-    ) internal {
+    function settlePendingBeraSleep(address _user, uint256 _pid, uint256 _boostMultiplier) internal {
         UserInfo memory user = userInfo[_pid][_user];
 
         uint256 boostedAmount = user.amount.mul(_boostMultiplier).div(BOOST_PRECISION);

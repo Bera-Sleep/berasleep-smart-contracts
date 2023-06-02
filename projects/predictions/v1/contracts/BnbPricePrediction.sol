@@ -428,22 +428,14 @@ contract BnbPricePrediction is Ownable, Pausable {
     /**
      * @dev Lock round
      */
-    function _safeLockRound(
-        uint256 epoch,
-        uint256 roundId,
-        int256 price
-    ) internal {
+    function _safeLockRound(uint256 epoch, uint256 roundId, int256 price) internal {
         require(rounds[epoch].startBlock != 0, "Can only lock round after round has started");
         require(block.number >= rounds[epoch].lockBlock, "Can only lock round after lockBlock");
         require(block.number <= rounds[epoch].lockBlock.add(bufferBlocks), "Can only lock round within bufferBlocks");
         _lockRound(epoch, roundId, price);
     }
 
-    function _lockRound(
-        uint256 epoch,
-        uint256 roundId,
-        int256 price
-    ) internal {
+    function _lockRound(uint256 epoch, uint256 roundId, int256 price) internal {
         Round storage round = rounds[epoch];
         round.lockPrice = price;
         round.lockOracleId = roundId;
@@ -454,22 +446,14 @@ contract BnbPricePrediction is Ownable, Pausable {
     /**
      * @dev End round
      */
-    function _safeEndRound(
-        uint256 epoch,
-        uint256 roundId,
-        int256 price
-    ) internal {
+    function _safeEndRound(uint256 epoch, uint256 roundId, int256 price) internal {
         require(rounds[epoch].lockBlock != 0, "Can only end round after round has locked");
         require(block.number >= rounds[epoch].closeBlock, "Can only end round after closeBlock");
         require(block.number <= rounds[epoch].closeBlock.add(bufferBlocks), "Can only end round within bufferBlocks");
         _endRound(epoch, roundId, price);
     }
 
-    function _endRound(
-        uint256 epoch,
-        uint256 roundId,
-        int256 price
-    ) internal {
+    function _endRound(uint256 epoch, uint256 roundId, int256 price) internal {
         Round storage round = rounds[epoch];
         round.closePrice = price;
         round.closeOracleId = roundId;

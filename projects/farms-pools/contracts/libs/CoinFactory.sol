@@ -18,12 +18,7 @@ contract CoinFactory is Ownable {
      * @param supply: supply
      * @param decimals: decimals of the token
      */
-    function deployCoin(
-        string memory name,
-        string memory symbol,
-        uint256 supply,
-        uint8 decimals
-    ) external onlyOwner {
+    function deployCoin(string memory name, string memory symbol, uint256 supply, uint8 decimals) external onlyOwner {
         MockCoin newCoin = new MockCoin(name, symbol, supply, decimals, msg.sender);
         emit NewCoinCreated(address(newCoin));
     }

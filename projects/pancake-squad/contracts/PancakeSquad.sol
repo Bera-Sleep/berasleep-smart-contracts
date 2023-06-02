@@ -33,11 +33,7 @@ contract PancakeSquad is ERC721Enumerable, Ownable {
      * @param _symbol: NFT symbol
      * @param _maxSupply: NFT max totalSupply
      */
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        uint256 _maxSupply
-    ) ERC721(_name, _symbol) {
+    constructor(string memory _name, string memory _symbol, uint256 _maxSupply) ERC721(_name, _symbol) {
         require((_maxSupply == 100) || (_maxSupply == 1000) || (_maxSupply == 10000), "Operations: Wrong max supply");
         maxSupply = _maxSupply;
     }

@@ -55,11 +55,7 @@ contract PancakeBunnies is ERC721, Ownable {
     /**
      * @dev Mint NFTs. Only the owner can call it.
      */
-    function mint(
-        address _to,
-        string calldata _tokenURI,
-        uint8 _bunnyId
-    ) external onlyOwner returns (uint256) {
+    function mint(address _to, string calldata _tokenURI, uint8 _bunnyId) external onlyOwner returns (uint256) {
         uint256 newId = _tokenIds.current();
         _tokenIds.increment();
         bunnyIds[newId] = _bunnyId;

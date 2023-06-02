@@ -274,11 +274,7 @@ contract BeraSleepPool is Ownable, Pausable {
      * @param _lockDuration: Token lock duration
      * @param _user: User address
      */
-    function depositOperation(
-        uint256 _amount,
-        uint256 _lockDuration,
-        address _user
-    ) internal {
+    function depositOperation(uint256 _amount, uint256 _lockDuration, address _user) internal {
         UserInfo storage user = userInfo[_user];
         if (user.shares == 0 || _amount > 0) {
             require(_amount > MIN_DEPOSIT_AMOUNT, "Deposit amount must be greater than MIN_DEPOSIT_AMOUNT");

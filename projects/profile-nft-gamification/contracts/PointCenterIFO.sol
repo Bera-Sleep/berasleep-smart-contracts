@@ -96,11 +96,10 @@ contract PointCenterIFO is Ownable {
         return status;
     }
 
-    function checkClaimStatuses(address _userAddress, address[] memory _contractAddresses)
-        external
-        view
-        returns (bool[] memory)
-    {
+    function checkClaimStatuses(
+        address _userAddress,
+        address[] memory _contractAddresses
+    ) external view returns (bool[] memory) {
         bool[] memory responses = new bool[](_contractAddresses.length);
 
         require(_contractAddresses.length <= maxViewLength, "Length must be <= maxViewLength");

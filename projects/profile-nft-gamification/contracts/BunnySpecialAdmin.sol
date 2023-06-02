@@ -34,11 +34,7 @@ contract BunnySpecialAdmin is Ownable {
      * @param _endBlock: end block for claiming
      * @param _tokenURI: tokenURI (string)
      */
-    constructor(
-        address _bunnyMintingStation,
-        uint256 _endBlock,
-        string memory _tokenURI
-    ) public {
+    constructor(address _bunnyMintingStation, uint256 _endBlock, string memory _tokenURI) public {
         bunnyMintingStation = BunnyMintingStation(_bunnyMintingStation);
         endBlock = _endBlock;
         tokenURI = _tokenURI;

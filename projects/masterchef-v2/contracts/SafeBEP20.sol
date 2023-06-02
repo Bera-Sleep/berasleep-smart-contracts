@@ -18,20 +18,11 @@ library SafeBEP20 {
     using SafeMath for uint256;
     using Address for address;
 
-    function safeTransfer(
-        IBEP20 token,
-        address to,
-        uint256 value
-    ) internal {
+    function safeTransfer(IBEP20 token, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
     }
 
-    function safeTransferFrom(
-        IBEP20 token,
-        address from,
-        address to,
-        uint256 value
-    ) internal {
+    function safeTransferFrom(IBEP20 token, address from, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
     }
 
@@ -42,11 +33,7 @@ library SafeBEP20 {
      * Whenever possible, use {safeIncreaseAllowance} and
      * {safeDecreaseAllowance} instead.
      */
-    function safeApprove(
-        IBEP20 token,
-        address spender,
-        uint256 value
-    ) internal {
+    function safeApprove(IBEP20 token, address spender, uint256 value) internal {
         // safeApprove should only be called when setting an initial allowance,
         // or when resetting it to zero. To increase and decrease it, use
         // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'
@@ -58,20 +45,12 @@ library SafeBEP20 {
         _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
     }
 
-    function safeIncreaseAllowance(
-        IBEP20 token,
-        address spender,
-        uint256 value
-    ) internal {
+    function safeIncreaseAllowance(IBEP20 token, address spender, uint256 value) internal {
         uint256 newAllowance = token.allowance(address(this), spender).add(value);
         _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
     }
 
-    function safeDecreaseAllowance(
-        IBEP20 token,
-        address spender,
-        uint256 value
-    ) internal {
+    function safeDecreaseAllowance(IBEP20 token, address spender, uint256 value) internal {
         uint256 newAllowance = token.allowance(address(this), spender).sub(
             value,
             "SafeBEP20: decreased allowance below zero"
