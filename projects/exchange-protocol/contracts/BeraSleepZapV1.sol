@@ -6,34 +6,34 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-import {IPancakePair} from "./interfaces/IPancakePair.sol";
-import {IPancakeRouter02} from "./interfaces/IPancakeRouter02.sol";
+import {IBeraSleepPair} from "./interfaces/IBeraSleepPair.sol";
+import {IBeraSleepRouter02} from "./interfaces/IBeraSleepRouter02.sol";
 import {IWETH} from "./interfaces/IWETH.sol";
 import {Babylonian} from "./libraries/Babylonian.sol";
 
 /*
  * @author Inspiration from the work of Zapper and Beefy.
- * Implemented and modified by PancakeSwap teams.
+ * Implemented and modified by BeraSleepSwap teams.
  */
-contract PancakeZapV1 is Ownable, ReentrancyGuard {
+contract BeraSleepZapV1 is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     // Interface for Wrapped BNB (WBNB)
     IWETH public WBNB;
 
-    // PancakeRouter interface
-    IPancakeRouter02 public pancakeRouter;
+    // BeraSleepRouter interface
+    IBeraSleepRouter02 public pancakeRouter;
 
     // Maximum integer (used for managing allowance)
     uint256 public constant MAX_INT = 2**256 - 1;
 
-    // Minimum amount for a swap (derived from PancakeSwap)
+    // Minimum amount for a swap (derived from BeraSleepSwap)
     uint256 public constant MINIMUM_AMOUNT = 1000;
 
     // Maximum reverse zap ratio (100 --> 1%, 1000 --> 0.1%)
     uint256 public maxZapReverseRatio;
 
-    // Address PancakeRouter
+    // Address BeraSleepRouter
     address private pancakeRouterAddress;
 
     // Address Wrapped BNB (WBNB)
@@ -84,7 +84,7 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
     /*
      * @notice Constructor
      * @param _WBNBAddress: address of the WBNB contract
-     * @param _pancakeRouter: address of the PancakeRouter
+     * @param _pancakeRouter: address of the BeraSleepRouter
      * @param _maxZapReverseRatio: maximum zap ratio
      */
     constructor(
@@ -95,7 +95,7 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
         WBNBAddress = _WBNBAddress;
         WBNB = IWETH(_WBNBAddress);
         pancakeRouterAddress = _pancakeRouter;
-        pancakeRouter = IPancakeRouter02(_pancakeRouter);
+        pancakeRouter = IBeraSleepRouter02(_pancakeRouter);
         maxZapReverseRatio = _maxZapReverseRatio;
     }
 
@@ -338,13 +338,13 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
             address swapTokenOut
         )
     {
-        address token0 = IPancakePair(_lpToken).token0();
-        address token1 = IPancakePair(_lpToken).token1();
+        address token0 = IBeraSleepPair(_lpToken).token0();
+        address token1 = IBeraSleepPair(_lpToken).token1();
 
         require(_tokenToZap == token0 || _tokenToZap == token1, "Zap: Wrong tokens");
 
         // Convert to uint256 (from uint112)
-        (uint256 reserveA, uint256 reserveB, ) = IPancakePair(_lpToken).getReserves();
+        (uint256 reserveA, uint256 reserveB, ) = IBeraSleepPair(_lpToken).getReserves();
 
         if (token0 == _tokenToZap) {
             swapTokenOut = token1;
@@ -387,20 +387,20 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
         )
     {
         require(
-            _token0ToZap == IPancakePair(_lpToken).token0() || _token0ToZap == IPancakePair(_lpToken).token1(),
+            _token0ToZap == IBeraSleepPair(_lpToken).token0() || _token0ToZap == IBeraSleepPair(_lpToken).token1(),
             "Zap: Wrong token0"
         );
         require(
-            _token1ToZap == IPancakePair(_lpToken).token0() || _token1ToZap == IPancakePair(_lpToken).token1(),
+            _token1ToZap == IBeraSleepPair(_lpToken).token0() || _token1ToZap == IBeraSleepPair(_lpToken).token1(),
             "Zap: Wrong token1"
         );
 
         require(_token0ToZap != _token1ToZap, "Zap: Same tokens");
 
         // Convert to uint256 (from uint112)
-        (uint256 reserveA, uint256 reserveB, ) = IPancakePair(_lpToken).getReserves();
+        (uint256 reserveA, uint256 reserveB, ) = IBeraSleepPair(_lpToken).getReserves();
 
-        if (_token0ToZap == IPancakePair(_lpToken).token0()) {
+        if (_token0ToZap == IBeraSleepPair(_lpToken).token0()) {
             sellToken0 = (_token0AmountIn * reserveB > _token1AmountIn * reserveA) ? true : false;
 
             // Calculate the amount that is expected to be swapped
@@ -463,17 +463,17 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
             address swapTokenOut
         )
     {
-        address token0 = IPancakePair(_lpToken).token0();
-        address token1 = IPancakePair(_lpToken).token1();
+        address token0 = IBeraSleepPair(_lpToken).token0();
+        address token1 = IBeraSleepPair(_lpToken).token1();
 
         require(_tokenToReceive == token0 || _tokenToReceive == token1, "Zap: Token not in LP");
 
         // Convert to uint256 (from uint112)
-        (uint256 reserveA, uint256 reserveB, ) = IPancakePair(_lpToken).getReserves();
+        (uint256 reserveA, uint256 reserveB, ) = IBeraSleepPair(_lpToken).getReserves();
 
         if (token1 == _tokenToReceive) {
             // sell token0
-            uint256 tokenAmountIn = (_lpTokenAmount * reserveA) / IPancakePair(_lpToken).totalSupply();
+            uint256 tokenAmountIn = (_lpTokenAmount * reserveA) / IBeraSleepPair(_lpToken).totalSupply();
 
             swapAmountIn = _calculateAmountToSwap(tokenAmountIn, reserveA, reserveB);
             swapAmountOut = pancakeRouter.getAmountOut(swapAmountIn, reserveA, reserveB);
@@ -481,7 +481,7 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
             swapTokenOut = token0;
         } else {
             // sell token1
-            uint256 tokenAmountIn = (_lpTokenAmount * reserveB) / IPancakePair(_lpToken).totalSupply();
+            uint256 tokenAmountIn = (_lpTokenAmount * reserveB) / IBeraSleepPair(_lpToken).totalSupply();
 
             swapAmountIn = _calculateAmountToSwap(tokenAmountIn, reserveB, reserveA);
             swapAmountOut = pancakeRouter.getAmountOut(swapAmountIn, reserveB, reserveA);
@@ -507,8 +507,8 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
     ) internal returns (uint256 lpTokenReceived) {
         require(_tokenAmountIn >= MINIMUM_AMOUNT, "Zap: Amount too low");
 
-        address token0 = IPancakePair(_lpToken).token0();
-        address token1 = IPancakePair(_lpToken).token1();
+        address token0 = IBeraSleepPair(_lpToken).token0();
+        address token1 = IBeraSleepPair(_lpToken).token1();
 
         require(_tokenToZap == token0 || _tokenToZap == token1, "Zap: Wrong tokens");
 
@@ -521,7 +521,7 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
 
         {
             // Convert to uint256 (from uint112)
-            (uint256 reserveA, uint256 reserveB, ) = IPancakePair(_lpToken).getReserves();
+            (uint256 reserveA, uint256 reserveB, ) = IBeraSleepPair(_lpToken).getReserves();
 
             require((reserveA >= MINIMUM_AMOUNT) && (reserveB >= MINIMUM_AMOUNT), "Zap: Reserves too low");
 
@@ -591,11 +591,11 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
         bool _isToken0Sold
     ) internal returns (uint256 lpTokenReceived) {
         require(
-            _token0ToZap == IPancakePair(_lpToken).token0() || _token0ToZap == IPancakePair(_lpToken).token1(),
+            _token0ToZap == IBeraSleepPair(_lpToken).token0() || _token0ToZap == IBeraSleepPair(_lpToken).token1(),
             "Zap: Wrong token0"
         );
         require(
-            _token1ToZap == IPancakePair(_lpToken).token0() || _token1ToZap == IPancakePair(_lpToken).token1(),
+            _token1ToZap == IBeraSleepPair(_lpToken).token0() || _token1ToZap == IBeraSleepPair(_lpToken).token1(),
             "Zap: Wrong token1"
         );
 
@@ -606,11 +606,11 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
 
         {
             // Convert to uint256 (from uint112)
-            (uint256 reserveA, uint256 reserveB, ) = IPancakePair(_lpToken).getReserves();
+            (uint256 reserveA, uint256 reserveB, ) = IBeraSleepPair(_lpToken).getReserves();
 
             require((reserveA >= MINIMUM_AMOUNT) && (reserveB >= MINIMUM_AMOUNT), "Zap: Reserves too low");
 
-            if (_token0ToZap == IPancakePair(_lpToken).token0()) {
+            if (_token0ToZap == IBeraSleepPair(_lpToken).token0()) {
                 swapAmountIn = _calculateAmountToSwapForRebalancing(
                     _token0AmountIn,
                     _token1AmountIn,
@@ -698,16 +698,16 @@ contract PancakeZapV1 is Ownable, ReentrancyGuard {
         address _tokenToReceive,
         uint256 _tokenAmountOutMin
     ) internal returns (uint256) {
-        address token0 = IPancakePair(_lpToken).token0();
-        address token1 = IPancakePair(_lpToken).token1();
+        address token0 = IBeraSleepPair(_lpToken).token0();
+        address token1 = IBeraSleepPair(_lpToken).token1();
 
         require(_tokenToReceive == token0 || _tokenToReceive == token1, "Zap: Token not in LP");
 
         // Burn all LP tokens to receive the two tokens to this address
-        (uint256 amount0, uint256 amount1) = IPancakePair(_lpToken).burn(address(this));
+        (uint256 amount0, uint256 amount1) = IBeraSleepPair(_lpToken).burn(address(this));
 
-        require(amount0 >= MINIMUM_AMOUNT, "PancakeRouter: INSUFFICIENT_A_AMOUNT");
-        require(amount1 >= MINIMUM_AMOUNT, "PancakeRouter: INSUFFICIENT_B_AMOUNT");
+        require(amount0 >= MINIMUM_AMOUNT, "BeraSleepRouter: INSUFFICIENT_A_AMOUNT");
+        require(amount1 >= MINIMUM_AMOUNT, "BeraSleepRouter: INSUFFICIENT_B_AMOUNT");
 
         address[] memory path = new address[](2);
         path[1] = _tokenToReceive;

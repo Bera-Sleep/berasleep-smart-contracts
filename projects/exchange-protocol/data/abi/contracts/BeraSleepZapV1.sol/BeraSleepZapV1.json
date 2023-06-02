@@ -391,7 +391,7 @@
     "name": "pancakeRouter",
     "outputs": [
       {
-        "internalType": "contract IPancakeRouter02",
+        "internalType": "contract IBeraSleepRouter02",
         "name": "",
         "type": "address"
       }
