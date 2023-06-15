@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "bsc-library/contracts/IBEP20.sol";
 import "bsc-library/contracts/SafeBEP20.sol";
 
-import "../PancakeBunnies.sol";
+import "../BeraSleepBunnies.sol";
 
 contract BunnyMintingFarm is Ownable {
     using SafeMath for uint8;
@@ -14,7 +14,7 @@ contract BunnyMintingFarm is Ownable {
 
     using SafeBEP20 for IBEP20;
 
-    PancakeBunnies public pancakeBunnies;
+    BeraSleepBunnies public beraSleepBunnies;
     IBEP20 public cakeToken;
 
     // Map if address can claim a NFT
@@ -68,7 +68,7 @@ contract BunnyMintingFarm is Ownable {
         string memory _ipfsHash,
         uint256 _endBlockNumber
     ) public {
-        pancakeBunnies = new PancakeBunnies(_baseURI);
+        beraSleepBunnies = new BeraSleepBunnies(_baseURI);
         cakeToken = _cakeToken;
         totalSupplyDistributed = _totalSupplyDistributed;
         cakePerBurn = _cakePerBurn;
@@ -86,15 +86,15 @@ contract BunnyMintingFarm is Ownable {
         bunnyIdURIs[4] = string(abi.encodePacked(_ipfsHash, "sparkle.json"));
 
         // Set token names for each bunnyId
-        pancakeBunnies.setBunnyName(0, "Swapsies");
-        pancakeBunnies.setBunnyName(1, "Drizzle");
-        pancakeBunnies.setBunnyName(2, "Blueberries");
-        pancakeBunnies.setBunnyName(3, "Circular");
-        pancakeBunnies.setBunnyName(4, "Sparkle");
+        beraSleepBunnies.setBunnyName(0, "Swapsies");
+        beraSleepBunnies.setBunnyName(1, "Drizzle");
+        beraSleepBunnies.setBunnyName(2, "Blueberries");
+        beraSleepBunnies.setBunnyName(3, "Circular");
+        beraSleepBunnies.setBunnyName(4, "Sparkle");
     }
 
     /**
-     * @dev Mint NFTs from the PancakeBunnies contract.
+     * @dev Mint NFTs from the BeraSleepBunnies contract.
      * Users can specify what bunnyId they want to mint. Users can claim once.
      * There is a limit on how many are distributed. It requires CAKE balance to be >0.
      */
@@ -117,21 +117,21 @@ contract BunnyMintingFarm is Ownable {
 
         string memory tokenURI = bunnyIdURIs[_bunnyId];
 
-        uint256 tokenId = pancakeBunnies.mint(address(msg.sender), tokenURI, _bunnyId);
+        uint256 tokenId = beraSleepBunnies.mint(address(msg.sender), tokenURI, _bunnyId);
 
         emit BunnyMint(msg.sender, tokenId, _bunnyId);
     }
 
     /**
-     * @dev Burn NFT from the PancakeBunnies contract.
+     * @dev Burn NFT from the BeraSleepBunnies contract.
      * Users can burn their NFT to get a set number of CAKE.
      * There is a cap on how many can be distributed for free.
      */
     function burnNFT(uint256 _tokenId) external {
-        require(pancakeBunnies.ownerOf(_tokenId) == msg.sender, "Not the owner");
+        require(beraSleepBunnies.ownerOf(_tokenId) == msg.sender, "Not the owner");
         require(block.number < endBlockNumber, "too late");
 
-        pancakeBunnies.burn(_tokenId);
+        beraSleepBunnies.burn(_tokenId);
         countBunniesBurnt = countBunniesBurnt.add(1);
         cakeToken.safeTransfer(address(msg.sender), cakePerBurn);
         emit BunnyBurn(msg.sender, _tokenId);
@@ -169,6 +169,6 @@ contract BunnyMintingFarm is Ownable {
      * to a new address.
      */
     function changeOwnershipNFTContract(address _newOwner) external onlyOwner {
-        pancakeBunnies.transferOwnership(_newOwner);
+        beraSleepBunnies.transferOwnership(_newOwner);
     }
 }

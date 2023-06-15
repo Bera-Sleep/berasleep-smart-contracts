@@ -7,18 +7,24 @@ const currentNetwork = network.name;
 const main = async () => {
   console.log("Deploying to network:", currentNetwork);
 
+  const BeraSleepBunniesContract = await ethers.getContractFactory("BeraSleepBunnies");
+
+  const beraSleepBunnies = await BeraSleepBunniesContract.deploy("ipfs://");
+
+  console.log("BeraSleepBunnies deployed to:", beraSleepBunnies.address);
+
   const _tokenPrice = parseEther("4");
   const _ipfsHash = "";
   const _startBlockTime = "1";
   const _endBlockTime = "1";
 
   const BunnyMintingStation = await ethers.getContractFactory("BunnyMintingStation");
-  const bunnyMintingStation = await BunnyMintingStation.deploy(config.BeraSleepBunnies[currentNetwork]);
+  const bunnyMintingStation = await BunnyMintingStation.deploy(beraSleepBunnies.address);
   console.log("BunnyMintingStation deployed to:", bunnyMintingStation.address);
 
   const BunnyFactoryV2 = await ethers.getContractFactory("BunnyFactoryV2");
   const bunnyFactoryV2 = await BunnyFactoryV2.deploy(
-    config.BeraSleepBunnies[currentNetwork],
+    beraSleepBunnies.address,
     config.BeraSleepToken[currentNetwork],
     _tokenPrice,
     _ipfsHash,

@@ -2,8 +2,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract PancakeBunnies",
-        "name": "_pancakeBunnies",
+        "internalType": "contract BeraSleepBunnies",
+        "name": "_beraSleepBunnies",
         "type": "address"
       }
     ],
@@ -106,6 +106,19 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beraSleepBunnies",
+    "outputs": [
+      {
+        "internalType": "contract BeraSleepBunnies",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -255,19 +268,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeBunnies",
-    "outputs": [
-      {
-        "internalType": "contract PancakeBunnies",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
