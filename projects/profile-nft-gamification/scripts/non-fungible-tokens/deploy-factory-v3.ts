@@ -12,6 +12,11 @@ const main = async () => {
   const beraSleepBunnies = await BeraSleepBunniesContract.deploy("ipfs://");
 
   console.log("BeraSleepBunnies deployed to:", beraSleepBunnies.address);
+  await beraSleepBunnies.setBunnyName(0, "Sleepy");
+  await beraSleepBunnies.setBunnyName(1, "Dollop");
+  await beraSleepBunnies.setBunnyName(2, "Twinkle");
+  await beraSleepBunnies.setBunnyName(3, "Churro");
+  await beraSleepBunnies.setBunnyName(4, "Sunny");
 
   const _tokenPrice = parseEther("4");
   const _ipfsHash = "";
