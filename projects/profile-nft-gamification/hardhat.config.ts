@@ -7,6 +7,7 @@ import "hardhat-contract-sizer";
 import "hardhat-watcher";
 import "solidity-coverage";
 import "dotenv/config";
+import "./tasks/register-nft";
 
 const bscTestnet: NetworkUserConfig = {
   url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
