@@ -1,34 +1,22 @@
 import { ethers, network, run } from "hardhat";
-import config from "../config";
 
 const main = async () => {
-  // Get network name: hardhat, testnet or mainnet.
-  const networkName = network.name;
-  console.log(`Deploying to ${networkName} network...`);
-
-  // Compile contracts.
-  await run("compile");
-  console.log("Compiled contracts.");
-
-  // Deploy contract
   const ERC721NFTMarketV1 = await ethers.getContractFactory("ERC721NFTMarketV1");
 
-  const contract = await ERC721NFTMarketV1.deploy(
-    config.Admin[networkName],
-    config.Treasury[networkName],
-    config.WBNB[networkName],
-    config.MinimumAskPrice[networkName],
-    config.MaximumAskPrice[networkName]
-  );
+  const admin = "0x10A0031781971bd37504354BBa49299885aD5cd4";
+  const treasury = "0x10A0031781971bd37504354BBa49299885aD5cd4";
+  const WBera = "0x11DC191B1D664fcE05565A456C80aE81AB4914e9";
+  const minimumAskPrice = "5000000000000000"; // 0.005 WBERA
+  const maximumAskPrice = "10000000000000000000000"; // 10,000 WBERA
 
-  // Wait for the contract to be deployed before exiting the script.
-  await contract.deployed();
-  console.log(`Deployed to ${contract.address}`);
+  const contract = await ERC721NFTMarketV1.deploy(admin, treasury, WBera, minimumAskPrice, maximumAskPrice);
+
+  console.log("ERC721NFTMarketV1 address: ", contract.address);
 };
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    console.error("error", error);
     process.exit(1);
   });
